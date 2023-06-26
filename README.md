@@ -1,6 +1,9 @@
-# fastify-nodejs-application
+[![hexlet-check](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/hexlet-check.yml)
+[![Node CI](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/nodejs.yml/badge.svg)](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/nodejs.yml)
 
-[![Node CI](https://github.com/hexlet-boilerplates/fastify-nodejs-application/workflows/Node%20CI/badge.svg)](https://github.com/hexlet-boilerplates/fastify-nodejs-application/actions)
+# Task Manager
+
+[link](https://backend-project-6-production-709f.up.railway.app/)
 
 ## Setup
 
@@ -16,9 +19,3 @@ $ make start
 ```
 
 ---
-
-[![Hexlet Ltd. logo](https://raw.githubusercontent.com/Hexlet/assets/master/images/hexlet_logo128.png)](https://hexlet.io?utm_source=github&utm_medium=link&utm_campaign=fastify-nodejs-application)
-
-This repository is created and maintained by the team and the community of Hexlet, an educational project. [Read more about Hexlet](https://hexlet.io?utm_source=github&utm_medium=link&utm_campaign=fastify-nodejs-application).
-
-See most active contributors on [hexlet-friends](https://friends.hexlet.io/).
