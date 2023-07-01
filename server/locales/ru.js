@@ -36,6 +36,24 @@ export default {
           submit: 'Войти',
         },
       },
+      user: {
+        id: 'ID',
+        firstName: 'Имя',
+        lastName: 'Фамилия',
+        email: 'Email',
+        createdAt: 'Дата создания',
+        password: 'Пароль',
+        new: {
+          submit: 'Сохранить',
+          signUp: 'Регистрация',
+        },
+        edit: {
+          submit: 'Редактировать',
+        },
+        delete: {
+          submit: 'Удалить',
+        },
+      },
       users: {
         id: 'ID',
         email: 'Email',

@@ -13,6 +13,11 @@ export default (app) => {
       const user = new app.objection.models.user();
       reply.render('users/new', { user });
     })
+    .get('/users/:id/edit', async (req, reply) => {
+      const { id } = req.params;
+      const user = await app.objection.models.user.query().findById(id);
+      reply.render('users.edit', { user });
+    })
     .post('/users', async (req, reply) => {
       const user = new app.objection.models.user();
       user.$set(req.body.data);
@@ -28,5 +33,29 @@ export default (app) => {
       }
 
       return reply;
+    })
+    .patch('/users/:id', async (req, reply) => {
+      const { id } = req.params;
+      const user = await app.objection.models.user.query().findById(id);
+
+      try {
+        await user.$query().patch(req.body.data);
+        req.flash('info', i18next.t('flash.user.edit.success'));
+        reply.redirect(app.reverse('users'));
+      } catch (e) {
+        const { data } = e;
+
+        req.flash('error', i18next.t('flash.user.edit.error'));
+        reply.code(422);
+        user.$set(req.body.user);
+        reply.render('users/edit', { user, errors: data });
+      }
+
+      return reply;
+    })
+    .delete('/users/:id', async (req, reply) => {
+      const { id } = req.params;
+      await app.objection.models.user.query().deleteById(id);
+      reply.redirect(app.reverse('root'));
     });
 };

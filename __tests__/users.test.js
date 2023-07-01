@@ -5,13 +5,17 @@ import fastify from 'fastify';
 
 import init from '../server/plugin.js';
 import encrypt from '../server/lib/secure.cjs';
-import { getTestData, prepareData } from './helpers/index.js';
+import {
+  createRandomUser,
+  getRandomUsers,
+  prepareData,
+} from './helpers/index.js';
 
 describe('test users CRUD', () => {
   let app;
   let knex;
   let models;
-  const testData = getTestData();
+  const users = getRandomUsers();
 
   beforeAll(async () => {
     app = fastify({
@@ -27,7 +31,7 @@ describe('test users CRUD', () => {
     // перед каждым тестом выполняем миграции
     // и заполняем БД тестовыми данными
     await knex.migrate.latest();
-    await prepareData(app);
+    await prepareData(app, { users });
   });
 
   beforeEach(async () => {
@@ -52,7 +56,7 @@ describe('test users CRUD', () => {
   });
 
   it('create', async () => {
-    const params = testData.users.new;
+    const params = createRandomUser();
     const response = await app.inject({
       method: 'POST',
       url: app.reverse('users'),
@@ -68,6 +72,43 @@ describe('test users CRUD', () => {
     };
     const user = await models.user.query().findOne({ email: params.email });
     expect(user).toMatchObject(expected);
+  });
+
+  it('edit', async () => {
+    const currentUser = await models.user.query().findOne({ email: users[0].email });
+    const editedUser = {
+      ...currentUser,
+      firstName: 'editedName',
+      lastName: 'editedLastName',
+      password: 'editedPassword',
+    };
+    const response = await app.inject({
+      method: 'PATCH',
+      url: `/users/${currentUser.id}`,
+      payload: {
+        data: editedUser,
+      },
+    });
+
+    const expected = {
+      ..._.omit(editedUser, 'password'),
+      passwordDigest: encrypt(editedUser.password),
+    };
+    expect(response.statusCode).toBe(302);
+    const user = await models.user.query().findOne({ email: currentUser.email });
+    expect(user).toMatchObject(expected);
+  });
+
+  it('delete', async () => {
+    const currentUser = await models.user.query().findOne({ email: users[0].email });
+    const response = await app.inject({
+      method: 'DELETE',
+      url: `/users/${currentUser.id}`,
+    });
+
+    expect(response.statusCode).toBe(302);
+    const user = await models.user.query().findOne({ email: currentUser.email });
+    expect(user).toBeUndefined();
   });
 
   afterEach(async () => {

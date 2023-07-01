@@ -36,6 +36,24 @@ export default {
           submit: 'Login',
         },
       },
+      user: {
+        id: 'ID',
+        firstName: 'First name',
+        lastName: 'Last name',
+        email: 'Email',
+        createdAt: 'Created at',
+        password: 'Password',
+        new: {
+          submit: 'Save',
+          signUp: 'Sign Up',
+        },
+        edit: {
+          submit: 'Edit',
+        },
+        delete: {
+          submit: 'Delete',
+        },
+      },
       users: {
         id: 'ID',
         email: 'Email',

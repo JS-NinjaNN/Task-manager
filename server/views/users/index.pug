@@ -1,15 +1,23 @@
 extends ../layouts/application.pug
 
+block header
+  = t('layouts.application.users')
+
 block content
   table.table.table-striped
     thead
       tr
-        th= t('views.users.id')
-        th= t('views.users.email')
-        th= t('views.users.createdAt')
+        th= t('views.user.id')
+        th= t('views.user.email')
+        th= t('views.user.createdAt')
+        th= t('views.actions')
     tbody
       each user in users
         tr
           td= user.id
           td= user.email
           td= formatDate(user.createdAt)
+          td
+            .d-flex.flex-wrap
+              a.btn.btn-primary.me-1(href=`/users/${user.id}/edit`)= t('views.user.edit.submit')
+              +buttonTo(`/users/${user.id}`, 'delete')(class="btn btn-danger" value=t('views.user.delete.submit'))

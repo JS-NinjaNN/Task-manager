@@ -1,5 +1,6 @@
 - const getInputName = (property) => `data[${property}]`
 - const getInputId = (property) => `data_${property}`
+- const getEntityName = (entity) => _.camelCase(entity.constructor.name)
 
 mixin formFor(entity = null)
   form&attributes(attributes)
@@ -9,10 +10,11 @@ mixin input(entity, propertyName, errors = {})
   - propertyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
+  - entityName = getEntityName(entity)
   .mb-3(class=(errors[propertyName] && 'has-danger'))
     label(
       for= inputId
-    )= propertyName
+    )= t(`views.${entityName}.${propertyName}`)
     input(
       id= inputId
       name=getInputName(propertyName)
