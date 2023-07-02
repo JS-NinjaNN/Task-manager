@@ -7,7 +7,7 @@ export default {
       session: {
         create: {
           success: 'Вы залогинены',
-          error: 'Неправильный емейл или пароль',
+          error: 'Неправильный Email или пароль',
         },
         delete: {
           success: 'Вы разлогинены',
@@ -19,6 +19,17 @@ export default {
           success: 'Пользователь успешно зарегистрирован',
         },
       },
+      status: {
+        create: {
+          success: 'Статус успешно создан',
+        },
+        edit: {
+          success: 'Статус успешно отредактирован',
+        },
+        delete: {
+          status: 'Статус успешно удален',
+        },
+      },
       authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
     },
     layouts: {
@@ -27,6 +38,10 @@ export default {
         signIn: 'Вход',
         signUp: 'Регистрация',
         signOut: 'Выход',
+        statuses: 'Статусы',
+        labels: 'Метки',
+        tasks: 'Задачи',
+        createStatus: 'Создать статус',
       },
     },
     views: {
@@ -62,6 +77,27 @@ export default {
           submit: 'Сохранить',
           signUp: 'Регистрация',
         },
+        edit: {
+          submit: 'Редактировать',
+        },
+        delete: {
+          submit: 'Удалить',
+        },
+      },
+      status: {
+        id: 'ID',
+        name: 'Наименование',
+        createdAt: 'Дата создания',
+        new: {
+          title: 'Создание статуса',
+          submit: 'Создать',
+        },
+        edit: {
+          submit: 'Редактировать',
+        },
+        delete: {
+          submit: 'Удалить',
+        },
       },
       welcome: {
         index: {
@@ -70,6 +106,9 @@ export default {
           more: 'Узнать Больше',
         },
       },
+      actions: 'Действия',
     },
+    email: 'Email',
+    password: 'Пароль',
   },
 };

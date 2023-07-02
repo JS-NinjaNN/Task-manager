@@ -19,6 +19,17 @@ export default {
           success: 'User registered successfully',
         },
       },
+      status: {
+        create: {
+          success: 'Статус успешно создан',
+        },
+        edit: {
+          success: 'Статус успешно отредактирован',
+        },
+        delete: {
+          status: 'Статус успешно удален',
+        },
+      },
       authError: 'Access denied! Please login',
     },
     layouts: {
@@ -27,6 +38,10 @@ export default {
         signIn: 'Login',
         signUp: 'Register',
         signOut: 'Logout',
+        statuses: 'Statuses',
+        labels: 'Labels',
+        tasks: 'Tasks',
+        createStatus: 'Create a status',
       },
     },
     views: {
@@ -62,6 +77,27 @@ export default {
           submit: 'Register',
           signUp: 'Register',
         },
+        edit: {
+          submit: 'Edit',
+        },
+        delete: {
+          submit: 'Delete',
+        },
+      },
+      status: {
+        id: 'ID',
+        name: 'Title',
+        createdAt: 'Created at',
+        new: {
+          title: 'Create a status',
+          submit: 'Create',
+        },
+        edit: {
+          submit: 'Edit',
+        },
+        delete: {
+          submit: 'Delete',
+        },
       },
       welcome: {
         index: {
@@ -70,6 +106,9 @@ export default {
           more: 'Learn more',
         },
       },
+      actions: 'Actions',
     },
+    email: 'Email',
+    password: 'Password',
   },
 };
