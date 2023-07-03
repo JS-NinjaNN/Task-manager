@@ -1,8 +1,8 @@
 // @ts-check
 
 import objectionUnique from 'objection-unique';
-import BaseModel from './BaseModel.js';
 
+import BaseModel from './BaseModel.js';
 import encrypt from '../lib/secure.cjs';
 
 const unique = objectionUnique({ fields: ['email'] });

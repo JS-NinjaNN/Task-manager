@@ -121,7 +121,6 @@ export const options = {
 
 // eslint-disable-next-line no-unused-vars
 export default async (app, _options) => {
-  console.log(process.env.PGHOST);
   await registerPlugins(app);
 
   await setupLocalization();

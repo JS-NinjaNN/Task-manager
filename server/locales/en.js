@@ -69,21 +69,6 @@ export default {
           submit: 'Delete',
         },
       },
-      users: {
-        id: 'ID',
-        email: 'Email',
-        createdAt: 'Created at',
-        new: {
-          submit: 'Register',
-          signUp: 'Register',
-        },
-        edit: {
-          submit: 'Edit',
-        },
-        delete: {
-          submit: 'Delete',
-        },
-      },
       status: {
         id: 'ID',
         name: 'Title',

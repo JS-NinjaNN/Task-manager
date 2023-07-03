@@ -7,12 +7,11 @@ block content
   +formFor()(action=route('statuses') method='post')
     +input(status, 'name', errors)(type='text')
     +submit(status)(value=t('views.status.new.submit'))
-
 block content
   +formFor()(action=`/users/${user.id}` method='post')
-    +input(user, 'firstName', errors)(type='text')
-    +input(user, 'lastName', errors)(type='text')
-    +input(user, 'email', errors)(type='text')
-    +input(user, 'password', errors)(type='password')
-    input(name='_method' type='hidden' value='patch')
+    +input(user, 'firstName', errors)(type="text")
+    +input(user, 'lastName', errors)(type="text")
+    +input(user, 'email', errors)(type="text")
+    +input(user, 'password', errors)(type="password")
+    input(name="_method" type="hidden" value="patch")
     +submit(user)(value=t('views.user.new.submit'))

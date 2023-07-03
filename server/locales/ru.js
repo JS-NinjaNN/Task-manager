@@ -69,21 +69,6 @@ export default {
           submit: 'Удалить',
         },
       },
-      users: {
-        id: 'ID',
-        email: 'Email',
-        createdAt: 'Дата создания',
-        new: {
-          submit: 'Сохранить',
-          signUp: 'Регистрация',
-        },
-        edit: {
-          submit: 'Редактировать',
-        },
-        delete: {
-          submit: 'Удалить',
-        },
-      },
       status: {
         id: 'ID',
         name: 'Наименование',

@@ -16,7 +16,7 @@ export default (app) => {
     .get('/users/:id/edit', async (req, reply) => {
       const { id } = req.params;
       const user = await app.objection.models.user.query().findById(id);
-      reply.render('users.edit', { user });
+      reply.render('users/edit', { user });
     })
     .post('/users', async (req, reply) => {
       const user = new app.objection.models.user();
@@ -44,7 +44,6 @@ export default (app) => {
         reply.redirect(app.reverse('users'));
       } catch (e) {
         const { data } = e;
-
         req.flash('error', i18next.t('flash.user.edit.error'));
         reply.code(422);
         user.$set(req.body.user);
