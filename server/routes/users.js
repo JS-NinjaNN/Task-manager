@@ -12,11 +12,14 @@ export default (app) => {
     .get('/users/new', { name: 'newUser' }, (req, reply) => {
       const user = new app.objection.models.user();
       reply.render('users/new', { user });
+      return reply;
     })
     .get('/users/:id/edit', async (req, reply) => {
       const { id } = req.params;
+      console.log('РООРШЫФРШОВАЫРФОШАРОЫФАРОЫФРОАРОЫФАРОЛФЫЛРОАЛЫОРФАРФЫРОЛрол', req.user);
       const user = await app.objection.models.user.query().findById(id);
       reply.render('users/edit', { user });
+      return reply;
     })
     .post('/users', async (req, reply) => {
       const user = new app.objection.models.user();
@@ -56,5 +59,6 @@ export default (app) => {
       const { id } = req.params;
       await app.objection.models.user.query().deleteById(id);
       reply.redirect(app.reverse('root'));
+      return reply;
     });
 };
