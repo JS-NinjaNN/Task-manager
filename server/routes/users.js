@@ -16,9 +16,17 @@ export default (app) => {
     })
     .get('/users/:id/edit', async (req, reply) => {
       const { id } = req.params;
-      console.log('РООРШЫФРШОВАЫРФОШАРОЫФАРОЫФРОАРОЫФАРОЛФЫЛРОАЛЫОРФАРФЫРОЛрол', req.user);
-      const user = await app.objection.models.user.query().findById(id);
-      reply.render('users/edit', { user });
+      const currentUserId = req?.user?.id;
+      if (!currentUserId) {
+        req.flash('error', i18next.t('flash.authError'));
+        reply.render('welcome/index');
+      } else if (Number(currentUserId) !== id) {
+        req.flash('error', i18next.t('flash.wrongUserError'));
+        reply.render('welcome/index');
+      } else {
+        const user = await app.objection.models.user.query().findById(id);
+        reply.render('users/edit', { user });
+      }
       return reply;
     })
     .post('/users', async (req, reply) => {
@@ -34,7 +42,6 @@ export default (app) => {
         req.flash('error', i18next.t('flash.users.create.error'));
         reply.render('users/new', { user, errors: data });
       }
-
       return reply;
     })
     .patch('/users/:id', async (req, reply) => {
@@ -57,8 +64,18 @@ export default (app) => {
     })
     .delete('/users/:id', async (req, reply) => {
       const { id } = req.params;
-      await app.objection.models.user.query().deleteById(id);
-      reply.redirect(app.reverse('root'));
+      const currentUserId = req?.user?.id ?? null;
+      console.log('SDKADLKSKLDSALK', typeof id, typeof currentUserId);
+      if (currentUserId === null) {
+        req.flash('error', i18next.t('flash.authError'));
+        reply.render('welcome/index');
+      } else if (currentUserId !== id) {
+        req.flash('error', i18next.t('flash.wrongUserError'));
+        reply.render('welcome/index');
+      } else {
+        await app.objection.models.user.query().deleteById(id);
+        reply.redirect(app.reverse('root'));
+      }
       return reply;
     });
 };
