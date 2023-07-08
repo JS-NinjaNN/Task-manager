@@ -17,7 +17,7 @@ const createRandomUser = () => ({
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
   email: faker.internet.email(),
-  password: faker.internet.password(),
+  passwordDigest: encrypt(faker.internet.password()),
 });
 
 const createRandomUserData = () => ({

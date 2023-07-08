@@ -20,7 +20,7 @@ export default (app) => {
       if (!currentUserId) {
         req.flash('error', i18next.t('flash.authError'));
         reply.render('welcome/index');
-      } else if (Number(currentUserId) !== id) {
+      } else if (Number(id) !== currentUserId) {
         req.flash('error', i18next.t('flash.wrongUserError'));
         reply.render('welcome/index');
       } else {
@@ -64,16 +64,16 @@ export default (app) => {
     })
     .delete('/users/:id', async (req, reply) => {
       const { id } = req.params;
-      const currentUserId = req?.user?.id ?? null;
-      console.log('SDKADLKSKLDSALK', typeof id, typeof currentUserId);
-      if (currentUserId === null) {
+      const currentUserId = req?.user?.id;
+      if (!currentUserId) {
         req.flash('error', i18next.t('flash.authError'));
         reply.render('welcome/index');
-      } else if (currentUserId !== id) {
+      } else if (currentUserId !== Number(id)) {
         req.flash('error', i18next.t('flash.wrongUserError'));
         reply.render('welcome/index');
       } else {
         await app.objection.models.user.query().deleteById(id);
+        req.logOut();
         reply.redirect(app.reverse('root'));
       }
       return reply;
