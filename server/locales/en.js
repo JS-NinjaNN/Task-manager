@@ -19,15 +19,15 @@ export default {
           success: 'User registered successfully',
         },
       },
-      status: {
+      statuses: {
         create: {
-          success: 'Статус успешно создан',
+          success: 'Status successfully created',
         },
         edit: {
-          success: 'Статус успешно отредактирован',
+          success: 'Status successfully edited',
         },
         delete: {
-          status: 'Статус успешно удален',
+          status: 'Status successfully deleted',
         },
       },
       authError: 'Access denied! Please login',

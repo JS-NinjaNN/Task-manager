@@ -50,11 +50,11 @@ export default (app) => {
 
       try {
         await user.$query().patch(req.body.data);
-        req.flash('info', i18next.t('flash.user.edit.success'));
+        req.flash('info', i18next.t('flash.users.edit.success'));
         reply.redirect(app.reverse('users'));
       } catch (e) {
         const { data } = e;
-        req.flash('error', i18next.t('flash.user.edit.error'));
+        req.flash('error', i18next.t('flash.users.edit.error'));
         reply.code(422);
         user.$set(req.body.user);
         reply.render('users/edit', { user, errors: data });
