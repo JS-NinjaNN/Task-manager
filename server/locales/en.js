@@ -86,6 +86,24 @@ export default {
           submit: 'Delete',
         },
       },
+      task: {
+        id: 'ID',
+        name: 'Title',
+        status: 'Status',
+        creator: 'Creator',
+        executor: 'Executor',
+        createdAt: 'Created at',
+        new: {
+          title: 'Create a status',
+          submit: 'Create',
+        },
+        edit: {
+          submit: 'Edit',
+        },
+        delete: {
+          submit: 'Delete',
+        },
+      },
       welcome: {
         index: {
           hello: 'Hello from Hexlet!',

@@ -86,6 +86,24 @@ export default {
           submit: 'Удалить',
         },
       },
+      task: {
+        id: 'ID',
+        name: 'Наименование',
+        status: 'Статус',
+        creator: 'Автор',
+        executor: 'Исполнитель',
+        createdAt: 'Дата создания',
+        new: {
+          title: 'Создание задачи',
+          submit: 'Создать',
+        },
+        edit: {
+          submit: 'Изменить',
+        },
+        delete: {
+          submit: 'Удалить',
+        },
+      },
       welcome: {
         index: {
           hello: 'Привет от Хекслета!',
