@@ -3,12 +3,26 @@
 import objectionUnique from 'objection-unique';
 
 import BaseModel from './BaseModel.js';
+import Task from './Task.js';
 
 const unique = objectionUnique({ fields: ['name'] });
 
 class Status extends unique(BaseModel) {
   static get tableName() {
     return 'statuses';
+  }
+
+  static get relationMappings() {
+    return {
+      tasks: {
+        relation: BaseModel.HasManyRelation,
+        modelClass: Task,
+        join: {
+          from: 'status.id',
+          to: 'tasks.statusId',
+        },
+      },
+    };
   }
 
   static get jsonSchema() {

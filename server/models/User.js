@@ -4,12 +4,34 @@ import objectionUnique from 'objection-unique';
 
 import BaseModel from './BaseModel.js';
 import encrypt from '../lib/secure.cjs';
+import Task from './Task.js';
 
 const unique = objectionUnique({ fields: ['email'] });
 
 class User extends unique(BaseModel) {
   static get tableName() {
     return 'users';
+  }
+
+  static get relationMappings() {
+    return {
+      createdTasks: {
+        relation: BaseModel.HasManyRelation,
+        modelClass: Task,
+        join: {
+          from: 'users.id',
+          to: 'tasks.creatorId',
+        },
+      },
+      executedTasks: {
+        relation: BaseModel.HasManyRelation,
+        modelClass: Task,
+        join: {
+          from: 'users.id',
+          to: 'tasks.executorId',
+        },
+      },
+    };
   }
 
   static get jsonSchema() {
