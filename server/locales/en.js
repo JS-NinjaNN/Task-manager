@@ -43,6 +43,7 @@ export default {
         labels: 'Labels',
         tasks: 'Tasks',
         createStatus: 'Create a status',
+        createTask: 'Create a task',
       },
     },
     views: {

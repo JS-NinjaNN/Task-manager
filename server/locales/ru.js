@@ -43,6 +43,7 @@ export default {
         labels: 'Метки',
         tasks: 'Задачи',
         createStatus: 'Создать статус',
+        createTask: 'Создать задачу',
       },
     },
     views: {
