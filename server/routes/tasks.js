@@ -5,9 +5,8 @@ import i18next from 'i18next';
 export default (app) => {
   app
     .get('/tasks', { name: 'tasks' }, async (req, reply) => {
-      const tasks = await app.objection.models.task.query().withGraphFetched('[status, creator, executor]').select('tasks.id', 'tasks.name', 'statuses.name as status', 'creator.name as creator', 'executor.name as executor', 'tasks.createdAt');
-      console.log(tasks);
-      // reply.render('users/index', { users });
+      const tasks = await app.objection.models.task.query().withGraphFetched('[status, creator, executor]');
+      reply.render('tasks/index', { tasks });
       return reply;
     });
     // .get('/users/new', { name: 'newUser' }, (req, reply) => {

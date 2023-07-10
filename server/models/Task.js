@@ -1,6 +1,5 @@
 import BaseModel from './BaseModel.js';
-import Status from './Status.js';
-import User from './User.js';
+import Models from './index.js';
 
 class Task extends BaseModel {
   static get tableName() {
@@ -11,15 +10,15 @@ class Task extends BaseModel {
     return {
       status: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: Status,
+        modelClass: Models.Status,
         join: {
-          from: 'status.id',
-          to: 'task.statusId',
+          from: 'statuses.id',
+          to: 'tasks.statusId',
         },
       },
       creator: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: User,
+        modelClass: Models.User,
         join: {
           from: 'users.id',
           to: 'tasks.creatorId',
@@ -27,7 +26,7 @@ class Task extends BaseModel {
       },
       executor: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: User,
+        modelClass: Models.User,
         join: {
           from: 'users.id',
           to: 'tasks.executorId',

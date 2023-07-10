@@ -3,7 +3,7 @@
 import objectionUnique from 'objection-unique';
 
 import BaseModel from './BaseModel.js';
-import Task from './Task.js';
+import Models from './index.js';
 
 const unique = objectionUnique({ fields: ['name'] });
 
@@ -16,7 +16,7 @@ class Status extends unique(BaseModel) {
     return {
       tasks: {
         relation: BaseModel.HasManyRelation,
-        modelClass: Task,
+        modelClass: Models.Task,
         join: {
           from: 'status.id',
           to: 'tasks.statusId',

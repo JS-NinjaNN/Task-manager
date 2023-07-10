@@ -4,7 +4,7 @@ import objectionUnique from 'objection-unique';
 
 import BaseModel from './BaseModel.js';
 import encrypt from '../lib/secure.cjs';
-import Task from './Task.js';
+import Models from './index.js';
 
 const unique = objectionUnique({ fields: ['email'] });
 
@@ -17,7 +17,7 @@ class User extends unique(BaseModel) {
     return {
       createdTasks: {
         relation: BaseModel.HasManyRelation,
-        modelClass: Task,
+        modelClass: Models.Task,
         join: {
           from: 'users.id',
           to: 'tasks.creatorId',
@@ -25,7 +25,7 @@ class User extends unique(BaseModel) {
       },
       executedTasks: {
         relation: BaseModel.HasManyRelation,
-        modelClass: Task,
+        modelClass: Models.Task,
         join: {
           from: 'users.id',
           to: 'tasks.executorId',
