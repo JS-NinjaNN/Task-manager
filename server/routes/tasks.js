@@ -8,12 +8,13 @@ export default (app) => {
       const tasks = await app.objection.models.task.query().withGraphFetched('[status, creator, executor]');
       reply.render('tasks/index', { tasks });
       return reply;
+    })
+    .get('/tasks/new', { name: 'newTask' }, (req, reply) => {
+      const task = new app.objection.models.task();
+      console.log('dasdasdsadasdasdasd', task);
+      reply.render('tasks/new', { task });
+      return reply;
     });
-    // .get('/users/new', { name: 'newUser' }, (req, reply) => {
-    //   const user = new app.objection.models.user();
-    //   reply.render('users/new', { user });
-    //   return reply;
-    // })
     // .get('/users/:id/edit', async (req, reply) => {
     //   const { id } = req.params;
     //   const currentUserId = req?.user?.id;
