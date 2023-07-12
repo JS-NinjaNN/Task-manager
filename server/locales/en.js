@@ -22,12 +22,19 @@ export default {
       statuses: {
         create: {
           success: 'Status successfully created',
+          error: 'Failed to create a status',
         },
         edit: {
           success: 'Status successfully edited',
         },
         delete: {
           status: 'Status successfully deleted',
+        },
+      },
+      tasks: {
+        create: {
+          success: 'Task sucessfully created',
+          error: 'Failed to create a task',
         },
       },
       authError: 'Access denied! Please login',
