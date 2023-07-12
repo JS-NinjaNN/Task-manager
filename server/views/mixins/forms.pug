@@ -25,7 +25,7 @@ mixin input(entity, propertyName, errors = {})
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
 mixin select(entity, propertyName, options, errors = {})
-  - properyErrors = _.get(errors, propertyName)
+  - propertyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
   - entityName = getEntityName(entity)
@@ -40,11 +40,11 @@ mixin select(entity, propertyName, options, errors = {})
     )&attributes(attributes)
       option(value='' selected= true)
       each item in options
-        if _.has(item, 'name')
-          option(value=item.id)
-            =item.name
+        if item.name
+          option(value= item.id)
+            = item.name
         else
-          option(value=item.id)
+          option(value= item.id)
             = `${item.firstName} ${item.lastName}`
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
