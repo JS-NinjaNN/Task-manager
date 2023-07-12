@@ -89,9 +89,12 @@ export default {
       task: {
         id: 'ID',
         name: 'Наименование',
+        description: 'Описание',
         status: 'Статус',
+        statusId: 'Статус',
         creator: 'Автор',
         executor: 'Исполнитель',
+        executorId: 'Исполнитель',
         createdAt: 'Дата создания',
         new: {
           title: 'Создание задачи',

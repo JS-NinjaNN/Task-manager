@@ -9,10 +9,13 @@ export default (app) => {
       reply.render('tasks/index', { tasks });
       return reply;
     })
-    .get('/tasks/new', { name: 'newTask' }, (req, reply) => {
+    .get('/tasks/new', { name: 'newTask' }, async (req, reply) => {
       const task = new app.objection.models.task();
-      console.log('dasdasdsadasdasdasd', task);
-      reply.render('tasks/new', { task });
+      const [statuses, users] = await Promise.all([
+        app.objection.models.status.query(),
+        app.objection.models.user.query(),
+      ]);
+      reply.render('tasks/new', { task, statuses, users });
       return reply;
     });
     // .get('/users/:id/edit', async (req, reply) => {

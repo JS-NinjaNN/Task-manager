@@ -24,7 +24,7 @@ mixin input(entity, propertyName, errors = {})
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
-mixin select(entity, propertyName, errors = {})
+mixin select(entity, propertyName, options, errors = {})
   - properyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
@@ -39,7 +39,15 @@ mixin select(entity, propertyName, errors = {})
       class=classLine
     )&attributes(attributes)
       option(value='' selected= true)
-
+      each item in options
+        if _.has(item, 'name')
+          option(value=item.id)
+            =item.name
+        else
+          option(value=item.id)
+            = `${item.firstName} ${item.lastName}`
+    if !_.isEmpty(propertyErrors)
+      .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
 mixin submit(form = null)
   input(class='btn btn-primary' type='submit')&attributes(attributes)

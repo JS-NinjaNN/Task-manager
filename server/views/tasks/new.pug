@@ -3,10 +3,10 @@ extends ../layouts/application.pug
 block header
   = t('views.task.new.title')
 
-//- block content
-//-   +formFor()(action=route('tasks') method='post')
-//-     +input(task, 'name', errors)(type="text")
-//-     +input(task, 'description', errors)(type="text")
-//-     +input(task, 'email', errors)(type="text")
-//-     +input(user, 'password', errors)(type="password")
-//-     +submit(user)(value=t('views.user.new.submit'))
+block content
+  +formFor()(action=route('tasks') method='post')
+    +input(task, 'name', errors)(type="text")
+    +input(task, 'description', errors)(type="text")
+    +select(task, 'statusId', statuses, errors)
+    +select(task, 'executorId', users, errors)
+    +submit(task)(value=t('views.task.new.submit'))

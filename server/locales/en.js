@@ -89,9 +89,12 @@ export default {
       task: {
         id: 'ID',
         name: 'Title',
+        description: 'Description',
         status: 'Status',
+        statusId: 'Status',
         creator: 'Creator',
         executor: 'Executor',
+        executorId: 'Executor',
         createdAt: 'Created at',
         new: {
           title: 'Create a status',
