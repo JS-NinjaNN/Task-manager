@@ -19,22 +19,19 @@ export default (app) => {
       return reply;
     })
     .get('/tasks/:id', async (req, reply) => {
-      const task = {};
+      const { id } = req.params;
+      const task = await app.objection.models.task.query().findById(id).withGraphFetched('[status, creator, executor]');
+      reply.render('tasks/specificTask', { task });
       return reply;
     })
     .get('/tasks/:id/edit', async (req, reply) => {
       const { id } = req.params;
-      // const currentUserId = req?.user?.id;
-      // if (!currentUserId) {
-      //   req.flash('error', i18next.t('flash.authError'));
-      //   reply.render('welcome/index');
-      // } else if (Number(id) !== currentUserId) {
-      //   req.flash('error', i18next.t('flash.wrongUserError'));
-      //   reply.render('welcome/index');
-      // } else {
-      //   const user = await app.objection.models.user.query().findById(id);
-      //   reply.render('users/edit', { user });
-      // }
+      const task = await app.objection.models.task.query().findById(id);
+      const [statuses, users] = await Promise.all([
+        app.objection.models.status.query(),
+        app.objection.models.user.query(),
+      ]);
+      reply.render('tasks/edit', { task, statuses, users });
       return reply;
     })
     .post('/tasks', async (req, reply) => {
@@ -50,37 +47,49 @@ export default (app) => {
           creatorId: Number(currentUserId),
           executorId: Number(taskData.executorId),
         });
+
         await app.objection.models.task.query().insert(validTask);
         req.flash('info', i18next.t('flash.tasks.create.success'));
         reply.redirect(app.reverse('root'));
-      } catch ({ data }) {
+      } catch (errors) {
         const [statuses, users] = await Promise.all([
           app.objection.models.status.query(),
           app.objection.models.user.query(),
         ]);
         req.flash('error', i18next.t('flash.tasks.create.error'));
         reply.render('tasks/new', {
-          task, statuses, users, errors: data,
+          task, statuses, users, errors: errors.data ?? {},
         });
       }
       return reply;
     })
     .patch('/tasks/:id', async (req, reply) => {
       const { id } = req.params;
-      const task = await app.objection.models.task.query().findById(id);
+      const task = new app.objection.models.task();
+      task.$set(req.body.data);
 
-      // try {
-      //   await user.$query().patch(req.body.data);
-      //   req.flash('info', i18next.t('flash.users.edit.success'));
-      //   reply.redirect(app.reverse('users'));
-      // } catch (e) {
-      //   const { data } = e;
-      //   req.flash('error', i18next.t('flash.users.edit.error'));
-      //   reply.code(422);
-      //   user.$set(req.body.user);
-      //   reply.render('users/edit', { user, errors: data });
-      // }
+      try {
+        const taskData = req.body.data;
+        const validTask = await app.objection.models.task.fromJson({
+          ...taskData,
+          statusId: Number(taskData.statusId),
+          executorId: Number(taskData.executorId),
+        });
 
+        await app.objection.models.task.query().findById(id).patch(validTask);
+        req.flash('info', i18next.t('flash.tasks.edit.success'));
+        reply.redirect(app.reverse('root'));
+      } catch (errors) {
+        console.log('SLDLADLKSAKLDSAKLDKLSADKLSAKLDSAKLD', errors);
+        const [statuses, users] = await Promise.all([
+          app.objection.models.status.query(),
+          app.objection.models.user.query(),
+        ]);
+        req.flash('error', i18next.t('flash.tasks.edit.error'));
+        reply.render('tasks/new', {
+          task, statuses, users, errors: errors.data ?? {},
+        });
+      }
       return reply;
     })
     .delete('/tasks/:id', async (req, reply) => {

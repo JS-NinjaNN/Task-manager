@@ -104,10 +104,11 @@ export default {
         executorId: 'Executor',
         createdAt: 'Created at',
         new: {
-          title: 'Create a status',
+          title: 'Create a task',
           submit: 'Create',
         },
         edit: {
+          title: 'Changing the task',
           submit: 'Edit',
         },
         delete: {

@@ -108,6 +108,7 @@ export default {
           submit: 'Создать',
         },
         edit: {
+          title: 'Изменение задачи',
           submit: 'Изменить',
         },
         delete: {

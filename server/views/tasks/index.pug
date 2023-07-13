@@ -19,12 +19,13 @@ block content
       each task in tasks
         tr
           td= task.id
-          td= task.name
-          td= task.status
-          td= task.creator
-          td= task.executor
+          td
+            a(href=`/tasks/${task.id}`)= task.name
+          td= task.status.name
+          td= `${task.creator.firstName} ${task.creator.lastName}`
+          td= `${task.executor.firstName} ${task.executor.lastName}`
           td= task.createdAt
           td
             .d-flex.flex-wrap
               a.btn.btn-primary.me-1(href=`/tasks/${task.id}/edit`)= t('views.task.edit.submit')
-              +buttonTo(`/tasks/${status.id}`, 'delete')(class="btn btn-danger" value=t('views.task.delete.submit'))
+              +buttonTo(`/tasks/${task.id}`, 'delete')(class="btn btn-danger" value=t('views.task.delete.submit'))
