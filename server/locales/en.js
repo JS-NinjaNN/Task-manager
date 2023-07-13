@@ -33,7 +33,7 @@ export default {
       },
       tasks: {
         create: {
-          success: 'Task sucessfully created',
+          success: 'Task sucсessfully created',
           error: 'Failed to create a task',
         },
       },
