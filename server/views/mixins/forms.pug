@@ -24,11 +24,12 @@ mixin input(entity, propertyName, errors = {})
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
-mixin select(entity, propertyName, options, errors = {})
+mixin select(entity, propertyName, options, errors = {}, type, isNewTask = true)
   - propertyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
   - entityName = getEntityName(entity)
+  - selectedId = type === 'status' ? entity.statusId : entity.executorId
   .mb-3(class=(errors[propertyName] && 'has-danger'))
     label(
       for = inputId
@@ -38,14 +39,15 @@ mixin select(entity, propertyName, options, errors = {})
       name=getInputName(propertyName)
       class=classLine
     )&attributes(attributes)
-      option(value='' selected= true)
-      each item in options
-        if item.name
+      if isNewTask
+        option(value='' selected= true)
+        each item in options
           option(value= item.id)
-            = item.name
-        else
-          option(value= item.id)
-            = `${item.firstName} ${item.lastName}`
+            = (type === 'status' ? item.name : `${item.firstName} ${item.lastName}`)
+      else
+        each item in options
+          option(value= item.id selected=(item.id === selectedId))
+            = (type === 'status' ? item.name : `${item.firstName} ${item.lastName}`)
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
