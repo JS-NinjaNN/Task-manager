@@ -1,7 +1,7 @@
 extends ../layouts/application.pug
 
 block header
-  = t('views.status.edit.signUp')
+  = t('views.status.edit.title')
 
 block content
   +formFor()(action=`/statuses/${status.id}` method='post')

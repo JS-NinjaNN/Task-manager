@@ -5,27 +5,28 @@ block header
 
 block content
   a.btn.btn-primary.me-1(href='/tasks/new')= t('layouts.application.createTask')
-  table.table.table-striped
-    thead
-      tr
-        th= t('views.task.id')
-        th= t('views.task.name')
-        th= t('views.task.status')
-        th= t('views.task.creator')
-        th= t('views.task.executor')
-        th= t('views.task.createdAt')
-        th= t('views.actions')
-    tbody
-      each task in tasks
+  .table-responsive
+    table.table.table-borderless.table-striped.mt-5.bg-white
+      thead
         tr
-          td= task.id
-          td
-            a(href=`/tasks/${task.id}`)= task.name
-          td= task.status.name
-          td= `${task.creator.firstName} ${task.creator.lastName}`
-          td= `${task.executor.firstName} ${task.executor.lastName}`
-          td= task.createdAt
-          td
-            .d-flex.flex-wrap
-              a.btn.btn-primary.me-1(href=`/tasks/${task.id}/edit`)= t('views.task.edit.submit')
-              +buttonTo(`/tasks/${task.id}`, 'delete')(class="btn btn-danger" value=t('views.task.delete.submit'))
+          th= t('views.task.id')
+          th= t('views.task.name')
+          th= t('views.task.status')
+          th= t('views.task.creator')
+          th= t('views.task.executor')
+          th= t('views.task.createdAt')
+          th= t('views.actions')
+      tbody
+        each task in tasks
+          tr
+            td= task.id
+            td
+              a(href=`/tasks/${task.id}`)= task.name
+            td= task.status.name
+            td= `${task.creator.firstName} ${task.creator.lastName}`
+            td= `${task.executor.firstName} ${task.executor.lastName}`
+            td= task.createdAt
+            td
+              .d-flex.flex-wrap
+                a.btn.btn-primary.me-1(href=`/tasks/${task.id}/edit`)= t('views.task.edit.submit')
+                +buttonTo(`/tasks/${task.id}`, 'delete')(class="btn btn-danger" value=t('views.task.delete.submit'))

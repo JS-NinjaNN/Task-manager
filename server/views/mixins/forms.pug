@@ -51,6 +51,27 @@ mixin select(entity, propertyName, options, errors = {}, type, isNewTask = true)
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
+mixin labelsSelect(entity, propertyName, options, { selectedLabelIds = [], errors = {} } = {})
+  - propertyErrors = _.get(errors, propertyName)
+  - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
+  - inputId = getInputId(propertyName)
+  - entityName = getEntityName(entity)
+  .mb-3(class=(errors[propertyName] && 'has-danger'))
+    label(
+      for = inputId
+    )= t(`views.${entityName}.${propertyName}`)
+    select(
+      id= inputId
+      name=getInputName(propertyName)
+      class=classLine
+      multiple='multiple'
+    )&attributes(attributes)
+      each item in options
+        option(value= item.id selected= (selectedLabelsIds.includes(item.id)))
+          = item.name
+    if !_.isEmpty(propertyErrors)
+      .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
+
 mixin submit(form = null)
   input(class='btn btn-primary' type='submit')&attributes(attributes)
 

@@ -68,11 +68,18 @@ export default (app) => {
       return reply;
     })
     .delete('/statuses/:id', async (req, reply) => {
+      const { id } = req.params;
+      const relatedTasks = await app.objection.models.task.query().where('statusId', id);
+
       if (req.isAuthenticated()) {
-        const { id } = req.params;
-        await app.objection.models.status.query().deleteById(id);
-        req.flash('info', i18next.t('flash.statuses.delete.success'));
-        reply.redirect(app.reverse('root'));
+        if (relatedTasks.length > 0) {
+          req.flash('error', i18next.t('flash.statuses.delete.error'));
+          reply.redirect(app.reverse('statuses'));
+        } else {
+          await app.objection.models.status.query().deleteById(id);
+          req.flash('info', i18next.t('flash.statuses.delete.success'));
+          reply.redirect(app.reverse('root'));
+        }
       } else {
         req.flash('error', i18next.t('flash.authError'));
         reply.render('welcome/index');

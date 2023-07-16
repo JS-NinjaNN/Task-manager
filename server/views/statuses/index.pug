@@ -4,21 +4,22 @@ block header
   = t('layouts.application.statuses')
 
 block content
-  a.btn.btn-primary.me-1(href='/statuses/new')= t('layouts.application.createStatus')
-  table.table.table-striped
-    thead
-      tr
-        th= t('views.status.id')
-        th= t('views.status.name')
-        th= t('views.status.createdAt')
-        th= t('views.actions')
-    tbody
-      each status in statuses
+  a.btn.btn-primary.me-1(href=route('newStatus'))= t('layouts.application.createStatus')
+  .table-responsive
+    table.table.table-borderless.table-striped.mt-5.bg-white
+      thead
         tr
-          td= status.id
-          td= status.name
-          td= formatDate(status.createdAt)
-          td
-            .d-flex.flex-wrap
-              a.btn.btn-primary.me-1(href=`/statuses/${status.id}/edit`)= t('views.status.edit.submit')
-              +buttonTo(`/statuses/${status.id}`, 'delete')(class="btn btn-danger" value=t('views.status.delete.submit'))
+          th= t('views.status.id')
+          th= t('views.status.name')
+          th= t('views.status.createdAt')
+          th= t('views.actions')
+      tbody
+        each status in statuses
+          tr
+            td= status.id
+            td= status.name
+            td= formatDate(status.createdAt)
+            td
+              .d-flex.flex-wrap
+                a.btn.btn-primary.me-1(href=`/statuses/${status.id}/edit`)= t('views.status.edit.submit')
+                +buttonTo(`/statuses/${status.id}`, 'delete')(class="btn btn-danger" value=t('views.status.delete.submit'))

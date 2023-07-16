@@ -13,7 +13,8 @@ export default (app) => {
         return app.httpErrors.internalServerError(err);
       }
       if (!user) {
-        const signInForm = req.body.data;
+        const signInForm = new app.objection.models.user();
+        signInForm.$set(req.body.data);
         const errors = {
           email: [{ message: i18next.t('flash.session.create.error') }],
         };

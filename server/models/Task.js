@@ -1,6 +1,7 @@
 import BaseModel from './BaseModel.js';
 import User from './User.js';
 import Status from './Status.js';
+import Label from './Label.js';
 
 class Task extends BaseModel {
   static get tableName() {
@@ -13,24 +14,36 @@ class Task extends BaseModel {
         relation: BaseModel.BelongsToOneRelation,
         modelClass: Status,
         join: {
-          from: 'statuses.id',
-          to: 'tasks.statusId',
+          from: 'tasks.statusId',
+          to: 'statuses.id',
         },
       },
       creator: {
         relation: BaseModel.BelongsToOneRelation,
         modelClass: User,
         join: {
-          from: 'users.id',
-          to: 'tasks.creatorId',
+          from: 'tasks.creatorId',
+          to: 'users.id',
         },
       },
       executor: {
         relation: BaseModel.BelongsToOneRelation,
         modelClass: User,
         join: {
-          from: 'users.id',
-          to: 'tasks.executorId',
+          from: 'tasks.executorId',
+          to: 'users.id',
+        },
+      },
+      labels: {
+        relation: BaseModel.ManyToManyRelation,
+        modelClass: Label,
+        join: {
+          from: 'tasks.id',
+          through: {
+            from: 'tasksLabels.taskId',
+            to: 'tasksLabels.labelId',
+          },
+          to: 'labels.id',
         },
       },
     };

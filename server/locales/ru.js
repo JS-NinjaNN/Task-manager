@@ -18,6 +18,9 @@ export default {
           error: 'Не удалось зарегистрировать',
           success: 'Пользователь успешно зарегистрирован',
         },
+        delete: {
+          error: 'Не удалось удалить пользователя',
+        },
       },
       statuses: {
         create: {
@@ -29,12 +32,35 @@ export default {
         },
         delete: {
           success: 'Статус успешно удален',
+          error: 'Не удалось удалить статус',
         },
       },
       tasks: {
         create: {
           success: 'Задача успешно создана',
           error: 'Не удалось создать задачу',
+        },
+        edit: {
+          success: 'Задача успешно изменена',
+          error: 'Не удалось изменить задачу',
+        },
+        delete: {
+          success: 'Задача успешно удалена',
+          error: 'Задачу может удалить только её автор',
+        },
+      },
+      labels: {
+        create: {
+          success: 'Метка успешно создана',
+          error: 'Не удалось создать метку',
+        },
+        edit: {
+          success: 'Метка успешно изменена',
+          error: 'Не удалось изменить метку',
+        },
+        delete: {
+          success: 'Метка успешно удалена',
+          error: 'Не удалось удалить метку',
         },
       },
       authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
@@ -51,6 +77,7 @@ export default {
         tasks: 'Задачи',
         createStatus: 'Создать статус',
         createTask: 'Создать задачу',
+        createLabel: 'Создать метку',
       },
     },
     views: {
@@ -87,6 +114,7 @@ export default {
           submit: 'Создать',
         },
         edit: {
+          title: 'Изменение статуса',
           submit: 'Редактировать',
         },
         delete: {
@@ -102,6 +130,7 @@ export default {
         creator: 'Автор',
         executor: 'Исполнитель',
         executorId: 'Исполнитель',
+        labels: 'Метки',
         createdAt: 'Дата создания',
         new: {
           title: 'Создание задачи',
@@ -109,6 +138,22 @@ export default {
         },
         edit: {
           title: 'Изменение задачи',
+          submit: 'Изменить',
+        },
+        delete: {
+          submit: 'Удалить',
+        },
+      },
+      label: {
+        id: 'ID',
+        name: 'Наименование',
+        createdAt: 'Дата создания',
+        new: {
+          title: 'Создание метки',
+          submit: 'Создать',
+        },
+        edit: {
+          title: 'Изменение метки',
           submit: 'Изменить',
         },
         delete: {

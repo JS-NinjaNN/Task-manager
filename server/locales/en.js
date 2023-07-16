@@ -18,6 +18,9 @@ export default {
           error: 'Failed to register',
           success: 'User registered successfully',
         },
+        delete: {
+          error: 'Failed to delete user',
+        },
       },
       statuses: {
         create: {
@@ -29,12 +32,35 @@ export default {
         },
         delete: {
           status: 'Status successfully deleted',
+          error: 'Failed to delete status',
         },
       },
       tasks: {
         create: {
           success: 'Task sucсessfully created',
           error: 'Failed to create a task',
+        },
+        edit: {
+          success: 'The task has been successfully modified',
+          error: 'Failed to change the task',
+        },
+        delete: {
+          success: 'Task successfully deleted',
+          error: 'A task can be deleted only by its author',
+        },
+      },
+      labels: {
+        create: {
+          success: 'Label successfully created',
+          error: 'Failed to create a label',
+        },
+        edit: {
+          success: 'The label has been successfully modified',
+          error: 'Failed to change the label',
+        },
+        delete: {
+          success: 'Label successfully deleted',
+          error: 'Failed to delete the label',
         },
       },
       authError: 'Access denied! Please login',
@@ -51,6 +77,7 @@ export default {
         tasks: 'Tasks',
         createStatus: 'Create a status',
         createTask: 'Create a task',
+        createLabel: 'Create a label',
       },
     },
     views: {
@@ -87,6 +114,7 @@ export default {
           submit: 'Create',
         },
         edit: {
+          title: 'Changing the status',
           submit: 'Edit',
         },
         delete: {
@@ -102,6 +130,7 @@ export default {
         creator: 'Creator',
         executor: 'Executor',
         executorId: 'Executor',
+        labels: 'Labels',
         createdAt: 'Created at',
         new: {
           title: 'Create a task',
@@ -109,6 +138,22 @@ export default {
         },
         edit: {
           title: 'Changing the task',
+          submit: 'Edit',
+        },
+        delete: {
+          submit: 'Delete',
+        },
+      },
+      label: {
+        id: 'ID',
+        name: 'Title',
+        createdAt: 'Created at',
+        new: {
+          title: 'Create a label',
+          submit: 'Create',
+        },
+        edit: {
+          title: 'Changing the label',
           submit: 'Edit',
         },
         delete: {

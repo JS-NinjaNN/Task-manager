@@ -9,4 +9,5 @@ block content
     +input(task, 'description', errors)(type="text")
     +select(task, 'statusId', statuses, errors, 'status', false)
     +select(task, 'executorId', users, errors, 'executor', false)
+    +labelsSelect(task, 'labels', labels, { selectedLabelsIds, errors })
     +buttonTo(`/tasks/${task.id}`, 'patch')(class="btn btn-danger" value=t('views.task.edit.submit'))
