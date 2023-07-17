@@ -22,8 +22,10 @@ export default (app) => {
           app.objection.models.user.query(),
           app.objection.models.label.query(),
         ]);
+        const selectedLabelsIds = [];
+
         reply.render('tasks/new', {
-          task, statuses, users, labels,
+          task, statuses, users, labels, selectedLabelsIds,
         });
       } else {
         req.flash('error', i18next.t('flash.authError'));
