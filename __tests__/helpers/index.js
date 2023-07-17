@@ -17,7 +17,7 @@ const createRandomUser = () => ({
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
   email: faker.internet.email(),
-  passwordDigest: encrypt(faker.internet.password()),
+  password: faker.internet.password(),
 });
 
 const createRandomUserData = () => ({
@@ -29,14 +29,15 @@ const createRandomUserData = () => ({
 
 const getTestData = () => getFixtureData('testData.json');
 
-const prepareData = (app, data) => {
+const prepareData = async (app, data) => {
   const { knex } = app.objection;
 
   const tables = Object.keys(data);
+
   return Promise.all(tables.map((tableName) => knex(tableName).insert(data[tableName])));
 };
 
-const getRandomUsers = (count = 10) => faker.helpers.multiple(createRandomUser, { count });
+const getRandomUsersData = (count = 10) => faker.helpers.multiple(createRandomUserData, { count });
 
 const createRandomStatusData = () => {
   const statusName = faker.word.adjective();
@@ -45,8 +46,6 @@ const createRandomStatusData = () => {
   };
 };
 
-const createRandomStatus = createRandomStatusData;
-
 const getRandomStatuses = (count = 10) => faker.helpers.multiple(createRandomStatusData, { count });
 
 export {
@@ -54,7 +53,7 @@ export {
   prepareData,
   createRandomUser,
   createRandomUserData,
-  getRandomUsers,
-  createRandomStatus,
+  getRandomUsersData,
+  createRandomStatusData,
   getRandomStatuses,
 };

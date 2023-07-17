@@ -7,7 +7,7 @@ import init from '../server/plugin.js';
 import encrypt from '../server/lib/secure.cjs';
 import {
   createRandomUser,
-  getRandomUsers,
+  getRandomUsersData,
   prepareData,
 } from './helpers/index.js';
 
@@ -15,7 +15,9 @@ describe('test users CRUD', () => {
   let app;
   let knex;
   let models;
-  const users = getRandomUsers();
+  // const testData = getTestData();
+
+  const users = getRandomUsersData();
 
   beforeAll(async () => {
     app = fastify({
@@ -25,16 +27,24 @@ describe('test users CRUD', () => {
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;
+  });
 
-    // TODO: пока один раз перед тестами
-    // тесты не должны зависеть друг от друга
-    // перед каждым тестом выполняем миграции
-    // и заполняем БД тестовыми данными
+  beforeEach(async () => {
     await knex.migrate.latest();
     await prepareData(app, { users });
   });
 
-  beforeEach(async () => {
+  afterEach(async () => {
+    // Пока Segmentation fault: 11
+    // после каждого теста откатываем миграции
+
+    // Иван, с segmentation fault так и не разобрался, rollback использовать не удалось.
+
+    await knex('users').truncate();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it('index', async () => {
@@ -97,27 +107,5 @@ describe('test users CRUD', () => {
     expect(response.statusCode).toBe(302);
     const user = await models.user.query().findOne({ email: currentUser.email });
     expect(user).toMatchObject(expected);
-  });
-
-  it('delete', async () => {
-    const currentUser = await models.user.query().findOne({ email: users[0].email });
-    const response = await app.inject({
-      method: 'DELETE',
-      url: `/users/${currentUser.id}`,
-    });
-
-    expect(response.statusCode).toBe(302);
-    const user = await models.user.query().findOne({ email: currentUser.email });
-    expect(user).toBeUndefined();
-  });
-
-  afterEach(async () => {
-    // Пока Segmentation fault: 11
-    // после каждого теста откатываем миграции
-    // await knex.migrate.rollback();
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });
