@@ -38,15 +38,19 @@ export default (app) => {
     .post('/statuses', async (req, reply) => {
       const status = new app.objection.models.status();
       status.$set(req.body.data);
-
-      try {
-        const validStatus = await app.objection.models.status.fromJson(req.body.data);
-        await app.objection.models.status.query().insert(validStatus);
-        req.flash('info', i18next.t('flash.statuses.create.success'));
-        reply.redirect(app.reverse('root'));
-      } catch ({ data }) {
-        req.flash('error', i18next.t('flash.statuses.create.error'));
-        reply.render('statuses/new', { status, errors: data });
+      if (req.isAuthenticated()) {
+        try {
+          const validStatus = await app.objection.models.status.fromJson(req.body.data);
+          await app.objection.models.status.query().insert(validStatus);
+          req.flash('info', i18next.t('flash.statuses.create.success'));
+          reply.redirect(app.reverse('root'));
+        } catch ({ data }) {
+          req.flash('error', i18next.t('flash.statuses.create.error'));
+          reply.render('statuses/new', { status, errors: data });
+        }
+      } else {
+        req.flash('error', i18next.t('flash.authError'));
+        reply.render('welcome/index');
       }
       return reply;
     })
@@ -54,17 +58,23 @@ export default (app) => {
       const { id } = req.params;
       const status = await app.objection.models.status.query().findById(id);
 
-      try {
-        await status.$query().patch(req.body.data);
-        req.flash('info', i18next.t('flash.statuses.edit.success'));
-        reply.redirect(app.reverse('statuses'));
-      } catch (e) {
-        const { data } = e;
-        req.flash('error', i18next.t('flash.statuses.edit.error'));
-        reply.code(422);
-        status.$set(req.body.status);
-        reply.render('statuses/edit', { status, errors: data });
+      if (req.isAuthenticated()) {
+        try {
+          await status.$query().patch(req.body.data);
+          req.flash('info', i18next.t('flash.statuses.edit.success'));
+          reply.redirect(app.reverse('statuses'));
+        } catch (e) {
+          const { data } = e;
+          req.flash('error', i18next.t('flash.statuses.edit.error'));
+          reply.code(422);
+          status.$set(req.body.status);
+          reply.render('statuses/edit', { status, errors: data });
+        }
+      } else {
+        req.flash('error', i18next.t('flash.authError'));
+        reply.render('welcome/index');
       }
+
       return reply;
     })
     .delete('/statuses/:id', async (req, reply) => {

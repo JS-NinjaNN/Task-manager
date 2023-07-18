@@ -30,16 +30,19 @@ describe('test session', () => {
       users.push(user);
       preparedUsers.push(preparedUser);
     }
-  });
 
-  beforeEach(async () => {
     await knex.migrate.latest();
     await prepareData(app, { users: preparedUsers });
   });
 
-  afterEach(async () => {
-    await knex('users').truncate();
-  });
+  // beforeEach(async () => {
+  //   await knex.migrate.latest();
+  //   await prepareData(app, { users: preparedUsers });
+  // });
+
+  // afterEach(async () => {
+  //   await knex('users').truncate();
+  // });
 
   afterAll(async () => {
     // await knex.migrate.rollback();

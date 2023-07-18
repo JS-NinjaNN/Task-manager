@@ -27,21 +27,24 @@ describe('test users CRUD', () => {
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;
-  });
 
-  beforeEach(async () => {
     await knex.migrate.latest();
     await prepareData(app, { users });
   });
 
-  afterEach(async () => {
-    // Пока Segmentation fault: 11
-    // после каждого теста откатываем миграции
+  // beforeEach(async () => {
+  //   await knex.migrate.latest();
+  //   await prepareData(app, { users });
+  // });
 
-    // Иван, с segmentation fault так и не разобрался, rollback использовать не удалось.
+  // afterEach(async () => {
+  //   // Пока Segmentation fault: 11
+  //   // после каждого теста откатываем миграции
 
-    await knex('users').truncate();
-  });
+  //   // Иван, с segmentation fault так и не разобрался, rollback использовать не удалось.
+
+  //   await knex('users').truncate();
+  // });
 
   afterAll(async () => {
     await app.close();
