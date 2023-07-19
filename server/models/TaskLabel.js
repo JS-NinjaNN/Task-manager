@@ -1,6 +1,4 @@
 import BaseModel from './BaseModel.js';
-import Task from './Task.js';
-import Label from './Label.js';
 
 class TaskLabel extends BaseModel {
   static get tableName() {
@@ -11,7 +9,7 @@ class TaskLabel extends BaseModel {
     return {
       task: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: Task,
+        modelClass: 'Task.js',
         join: {
           from: 'tasksLabels.taskId',
           to: 'tasks.id',
@@ -19,7 +17,7 @@ class TaskLabel extends BaseModel {
       },
       label: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: Label,
+        modelClass: 'Label.js',
         join: {
           from: 'tasksLabels.labelId',
           to: 'labels.id',

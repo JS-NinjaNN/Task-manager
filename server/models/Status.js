@@ -1,9 +1,7 @@
 // @ts-check
 
 import objectionUnique from 'objection-unique';
-
 import BaseModel from './BaseModel.js';
-import Task from './Task.js';
 
 const unique = objectionUnique({ fields: ['name'] });
 
@@ -16,9 +14,9 @@ class Status extends unique(BaseModel) {
     return {
       tasks: {
         relation: BaseModel.HasManyRelation,
-        modelClass: Task,
+        modelClass: 'Task.js',
         join: {
-          from: 'status.id',
+          from: 'statuses.id',
           to: 'tasks.statusId',
         },
       },
@@ -28,6 +26,7 @@ class Status extends unique(BaseModel) {
   static get jsonSchema() {
     return {
       type: 'object',
+      required: ['name'],
       properties: {
         id: { type: 'integer' },
         name: { type: 'string', minLength: 1 },

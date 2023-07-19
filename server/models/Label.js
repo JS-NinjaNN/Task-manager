@@ -1,8 +1,9 @@
+import objectionUnique from 'objection-unique';
 import BaseModel from './BaseModel.js';
 
-import Task from './Task.js';
+const unique = objectionUnique({ fields: ['name'] });
 
-class Label extends BaseModel {
+class Label extends unique(BaseModel) {
   static get tableName() {
     return 'labels';
   }
@@ -11,7 +12,7 @@ class Label extends BaseModel {
     return {
       tasks: {
         relation: BaseModel.ManyToManyRelation,
-        modelClass: Task,
+        modelClass: 'Task.js',
         join: {
           from: 'labels.id',
           through: {

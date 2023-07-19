@@ -1,9 +1,9 @@
+import objectionUnique from 'objection-unique';
 import BaseModel from './BaseModel.js';
-import User from './User.js';
-import Status from './Status.js';
-import Label from './Label.js';
 
-class Task extends BaseModel {
+const unique = objectionUnique({ fields: ['name'] });
+
+class Task extends unique(BaseModel) {
   static get tableName() {
     return 'tasks';
   }
@@ -12,7 +12,7 @@ class Task extends BaseModel {
     return {
       status: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: Status,
+        modelClass: 'Status.js',
         join: {
           from: 'tasks.statusId',
           to: 'statuses.id',
@@ -20,7 +20,7 @@ class Task extends BaseModel {
       },
       creator: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: User,
+        modelClass: 'User.js',
         join: {
           from: 'tasks.creatorId',
           to: 'users.id',
@@ -28,7 +28,7 @@ class Task extends BaseModel {
       },
       executor: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: User,
+        modelClass: 'User.js',
         join: {
           from: 'tasks.executorId',
           to: 'users.id',
@@ -36,7 +36,7 @@ class Task extends BaseModel {
       },
       labels: {
         relation: BaseModel.ManyToManyRelation,
-        modelClass: Label,
+        modelClass: 'Label.js',
         join: {
           from: 'tasks.id',
           through: {
@@ -63,6 +63,21 @@ class Task extends BaseModel {
       },
     };
   }
+
+  static modifiers = {
+    filterCreator(queryBuilder, creatorId) {
+      queryBuilder.where('creatorId', creatorId);
+    },
+    filterExecutor(queryBuilder, executorId) {
+      queryBuilder.where('executorId', executorId);
+    },
+    filterStatus(queryBuilder, statusId) {
+      queryBuilder.where('statusId', statusId);
+    },
+    filterLabel(queryBuilder, labelId) {
+      queryBuilder.where('labelId', labelId);
+    },
+  };
 }
 
 export default Task;
