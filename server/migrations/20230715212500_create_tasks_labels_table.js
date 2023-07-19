@@ -1,7 +1,4 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
+// @ts-check
 
 export const up = (knex) => (
   knex.schema.createTable('tasks_labels', (table) => {
