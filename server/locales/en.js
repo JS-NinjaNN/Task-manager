@@ -19,6 +19,7 @@ export default {
           success: 'User registered successfully',
         },
         delete: {
+          success: 'User successfully deleted',
           error: 'Failed to delete user',
         },
       },

@@ -37,7 +37,7 @@ export default (app) => {
       }
       return reply;
     })
-    .patch('/labels/:id', { name: 'editLable', preValidation: app.authenticate }, async (req, reply) => {
+    .patch('/labels/:id', { preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const { data } = req.body;
       const label = await app.objection.models.label.query().findById(id);

@@ -44,7 +44,7 @@ export default (app) => {
       }
       return reply;
     })
-    .patch('/users/:id', { name: 'editUser', preValidation: app.authenticate }, async (req, reply) => {
+    .patch('/users/:id', { preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const { data } = req.body;
       const user = await app.objection.models.user.query().findById(id);
