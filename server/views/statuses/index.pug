@@ -1,7 +1,7 @@
 extends ../layouts/application.pug
 
 block header
-  = t('layouts.application.statuses')
+  h1.display-4.fw-bold.mt-4= t('layouts.application.statuses')
 
 block content
   a.btn.btn-primary.me-1(href=route('newStatus'))= t('layouts.application.createStatus')

@@ -1,7 +1,7 @@
 extends ../layouts/application.pug
 
 block header
-  = t('views.label.edit.title')
+  h1.display-4.fw-bold= t('views.label.edit.title')
 
 block content
   +formFor()(action=`/labels/${label.id}` method='post')

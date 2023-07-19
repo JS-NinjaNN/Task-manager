@@ -1,7 +1,7 @@
 extends ../layouts/application.pug
 
 block header
-  = t('views.status.new.title')
+  h1.display-4.fw-bold.mt-4= t('views.status.new.title')
 
 block content
   +formFor()(action=route('statuses') method='post')

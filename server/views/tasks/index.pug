@@ -1,10 +1,25 @@
 extends ../layouts/application.pug
 
 block header
-  = t('layouts.application.tasks')
+  h1.display-4.fw-bold= t('layouts.application.tasks')
 
 block content
+  - isTasksEmpty = (tasks) => _.isEmpty(tasks)
   a.btn.btn-primary.me-1(href='/tasks/new')= t('layouts.application.createTask')
+
+  .card.shadow-sm
+    .card-body.p-4
+      +formFor()(action=`/tasks` method='get')
+        .row
+          .col-12.col-md
+            +filterSelect('status', statuses)
+          .col-12.col-md
+            +filterSelect('executor', users)
+          .col-12.col-md
+            +filterSelect('label', labels)
+        +checkbox('isCreatorUser')
+        +submit()(value=t('views.form.filter.submit'))
+
   .table-responsive
     table.table.table-borderless.table-striped.mt-5.bg-white
       thead
@@ -24,7 +39,7 @@ block content
               a(href=`/tasks/${task.id}`)= task.name
             td= task.status.name
             td= `${task.creator.firstName} ${task.creator.lastName}`
-            td= `${task.executor.firstName} ${task.executor.lastName}`
+            td= task.executor && `${task.executor.firstName} ${task.executor.lastName}`
             td= task.createdAt
             td
               .d-flex.flex-wrap

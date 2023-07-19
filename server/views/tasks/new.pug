@@ -1,13 +1,13 @@
 extends ../layouts/application.pug
 
 block header
-  = t('views.task.new.title')
+  h1.display-4.fw-bold= t('views.task.new.title')
 
 block content
   +formFor()(action=route('tasks') method='post')
     +input(task, 'name', errors)(type="text")
-    +input(task, 'description', errors)(type="text")
-    +select(task, 'statusId', statuses, error, 'status')
-    +select(task, 'executorId', users, errors, 'executor')
-    +labelsSelect(task, 'labels', labels, selectedLabelsIds, errors)
+    +textarea(task, 'description', errors)(rows='3')
+    +select(task, 'statusId', errors, statuses)
+    +select(task, 'executorId', errors, users)
+    +select(task, 'labels', errors, labels, true)
     +submit(task)(value=t('views.task.new.submit'))

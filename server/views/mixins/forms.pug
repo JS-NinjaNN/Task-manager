@@ -1,6 +1,8 @@
 - const getInputName = (property) => `data[${property}]`
 - const getInputId = (property) => `data_${property}`
 - const getEntityName = (entity) => _.camelCase(entity.constructor.name)
+- const inputLabel = (property) => t('views.form.placeholders.${property}')
+- const filterLabel = (property) => t(`views.form.filter.${property}`)
 
 mixin formFor(entity = null)
   form&attributes(attributes)
@@ -10,67 +12,90 @@ mixin input(entity, propertyName, errors = {})
   - propertyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
-  - entityName = getEntityName(entity)
   .mb-3(class=(errors[propertyName] && 'has-danger'))
     label(
       for= inputId
-    )= t(`views.${entityName}.${propertyName}`)
+    )= inputLabel(propertyName)
     input(
       id= inputId
       name=getInputName(propertyName)
       class=classLine
       value=_.get(entity, propertyName, '')
+      placeholder= inputLabel(propertyName)
     )&attributes(attributes)
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
-mixin select(entity, propertyName, options, errors = {}, type, isNewTask = true)
+mixin textarea(entity, propertyName, errors = {})
   - propertyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
-  - entityName = getEntityName(entity)
-  - selectedId = type === 'status' ? entity.statusId : entity.executorId
   .mb-3(class=(errors[propertyName] && 'has-danger'))
     label(
-      for = inputId
-    )= t(`views.${entityName}.${propertyName}`)
-    select(
+      for= inputId
+    )= inputLabel(propertyName)
+    textarea(
       id= inputId
       name=getInputName(propertyName)
       class=classLine
-    )&attributes(attributes)
-      if isNewTask
-        option(value='' selected= true)
-        each item in options
-          option(value= item.id)
-            = (type === 'status' ? item.name : `${item.firstName} ${item.lastName}`)
-      else
-        each item in options
-          option(value= item.id selected=(item.id === selectedId))
-            = (type === 'status' ? item.name : `${item.firstName} ${item.lastName}`)
+    )&attributes(attributes)= _.get(entity, propertyName, '')
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
-mixin labelsSelect(entity, propertyName, options, selectedLabelIds = [], errors = {})
+mixin select(entity, propertyName, errors = {}, items, isMultiple = false, selectedLabel)
   - propertyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
-  - entityName = getEntityName(entity)
+  - selectedOptions = entity[propertyName] ? [entity[propertyName]].flat().map((item) => item.id ? Number(item.id) : Number(item)) : []
   .mb-3(class=(errors[propertyName] && 'has-danger'))
-    label(
-      for = inputId
-    )= t(`views.${entityName}.${propertyName}`)
-    select(
-      id= inputId
-      name=getInputName(propertyName)
-      class=classLine
-      multiple='multiple'
-    )&attributes(attributes)
-      each item in options
-        option(value= item.id selected= (selectedLabelsIds.includes(item.id)))
-          = item.name
+    label(for=inputId)= inputLabel(propertyName)
+    select(id=inputId name=getInputName(propertyName) class=classLine multiple=isMultiple)&attributes(attributes)
+      if !isMultiple
+        option
+      each item in items
+        - isSelected = _.includes(selectedOptions, item.id)
+        if propertyName === 'executorId'
+          option(value=item.id selected=isSelected)= `${item.firstName} ${item.lastName}`
+        else if selectedLabel
+          option(value=item.id selected=selectedLabel.labels[0].id == item.id)= item.name
+        else
+          option(value=item.id selected=isSelected)= item.name
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
+
+
+mixin filterSelect(propertyName, items = [])
+  - inputId = getInputId(propertyName)
+  .mb-3.input-group
+    label(
+      class='input-group-text'
+      for= inputId
+    )= filterLabel(propertyName)
+    select(
+      id= inputId
+      name= propertyName
+      class='form-select'
+    )&attributes(attributes)
+      option
+      each item in items
+        if propertyName === 'executor'
+          option(value= item.id)= `${item.firstName} ${item.lastName}`
+        else
+          option(value= item.id, selected= item.id == query[propertyName])= item.name
+
+mixin checkbox(propertyName)
+  - inputId = getInputId(propertyName)
+  .mb-3.form-check
+    input(
+      id= inputId
+      name= propertyName
+      class='form-check-input'
+      type='checkbox'
+    )&attributes(attributes)
+    label(
+      class='form-check-label'
+      for= inputId
+    )= filterLabel(propertyName)
 
 mixin submit(form = null)
   input(class='btn btn-primary' type='submit')&attributes(attributes)
