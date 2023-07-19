@@ -1,13 +1,13 @@
 // @ts-check
 
-import objectionUnique from 'objection-unique';
+const objectionUnique = require('objection-unique');
+const BaseModel = require('./BaseModel.cjs');
 
-import BaseModel from './BaseModel.js';
-import encrypt from '../lib/secure.cjs';
+const encrypt = require('../lib/secure.cjs');
 
 const unique = objectionUnique({ fields: ['email'] });
 
-class User extends unique(BaseModel) {
+module.exports = class User extends unique(BaseModel) {
   static get tableName() {
     return 'users';
   }
@@ -16,7 +16,7 @@ class User extends unique(BaseModel) {
     return {
       createdTasks: {
         relation: BaseModel.HasManyRelation,
-        modelClass: 'Task.js',
+        modelClass: 'Task.cjs',
         join: {
           from: 'users.id',
           to: 'tasks.creatorId',
@@ -24,7 +24,7 @@ class User extends unique(BaseModel) {
       },
       executedTasks: {
         relation: BaseModel.HasManyRelation,
-        modelClass: 'Task.js',
+        modelClass: 'Task.cjs',
         join: {
           from: 'users.id',
           to: 'tasks.executorId',
@@ -54,6 +54,4 @@ class User extends unique(BaseModel) {
   verifyPassword(password) {
     return encrypt(password) === this.passwordDigest;
   }
-}
-
-export default User;
+};

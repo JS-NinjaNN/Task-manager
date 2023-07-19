@@ -1,6 +1,6 @@
-import BaseModel from './BaseModel.js';
+const BaseModel = require('./BaseModel.cjs');
 
-class TaskLabel extends BaseModel {
+module.exports = class TaskLabel extends BaseModel {
   static get tableName() {
     return 'tasksLabels';
   }
@@ -9,7 +9,7 @@ class TaskLabel extends BaseModel {
     return {
       task: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: 'Task.js',
+        modelClass: 'Task.cjs',
         join: {
           from: 'tasksLabels.taskId',
           to: 'tasks.id',
@@ -17,7 +17,7 @@ class TaskLabel extends BaseModel {
       },
       label: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: 'Label.js',
+        modelClass: 'Label.cjs',
         join: {
           from: 'tasksLabels.labelId',
           to: 'labels.id',
@@ -25,6 +25,4 @@ class TaskLabel extends BaseModel {
       },
     };
   }
-}
-
-export default TaskLabel;
+};

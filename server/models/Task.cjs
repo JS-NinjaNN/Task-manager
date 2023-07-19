@@ -1,9 +1,9 @@
-import objectionUnique from 'objection-unique';
-import BaseModel from './BaseModel.js';
+const objectionUnique = require('objection-unique');
+const BaseModel = require('./BaseModel.cjs');
 
 const unique = objectionUnique({ fields: ['name'] });
 
-class Task extends unique(BaseModel) {
+module.exports = class Task extends unique(BaseModel) {
   static get tableName() {
     return 'tasks';
   }
@@ -12,7 +12,7 @@ class Task extends unique(BaseModel) {
     return {
       status: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: 'Status.js',
+        modelClass: 'Status.cjs',
         join: {
           from: 'tasks.statusId',
           to: 'statuses.id',
@@ -20,7 +20,7 @@ class Task extends unique(BaseModel) {
       },
       creator: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: 'User.js',
+        modelClass: 'User.cjs',
         join: {
           from: 'tasks.creatorId',
           to: 'users.id',
@@ -28,7 +28,7 @@ class Task extends unique(BaseModel) {
       },
       executor: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: 'User.js',
+        modelClass: 'User.cjs',
         join: {
           from: 'tasks.executorId',
           to: 'users.id',
@@ -36,7 +36,7 @@ class Task extends unique(BaseModel) {
       },
       labels: {
         relation: BaseModel.ManyToManyRelation,
-        modelClass: 'Label.js',
+        modelClass: 'Label.cjs',
         join: {
           from: 'tasks.id',
           through: {
@@ -78,6 +78,4 @@ class Task extends unique(BaseModel) {
       queryBuilder.where('labelId', labelId);
     },
   };
-}
-
-export default Task;
+};

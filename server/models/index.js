@@ -1,10 +1,10 @@
 // @ts-check
 
-import User from './User.js';
-import Status from './Status.js';
-import Task from './Task.js';
-import Label from './Label.js';
-import TaskLabel from './TaskLabel.js';
+import User from './User.cjs';
+import Status from './Status.cjs';
+import Task from './Task.cjs';
+import Label from './Label.cjs';
+import TaskLabel from './TaskLabel.cjs';
 
 export default [
   User,

@@ -51,7 +51,7 @@ mixin select(entity, propertyName, options, errors = {}, type, isNewTask = true)
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
-mixin labelsSelect(entity, propertyName, options, selectedLabelIds, errors = {})
+mixin labelsSelect(entity, propertyName, options, selectedLabelIds = [], errors = {})
   - propertyErrors = _.get(errors, propertyName)
   - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
   - inputId = getInputId(propertyName)
