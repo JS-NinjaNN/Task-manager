@@ -3,6 +3,7 @@
    "version": "0.1.0",
    "type": "module",
    "description": "Task Manager",
+   "main": "server/plugin.js",
    "engines": {
       "node": ">=16.x"
    },
