@@ -33,188 +33,163 @@ export default (app) => {
       });
       return reply;
     })
-    .get('/tasks/new', { name: 'newTask' }, async (req, reply) => {
-      if (req.isAuthenticated()) {
-        const task = new app.objection.models.task();
+    .get('/tasks/new', { name: 'newTask', preValidation: app.authenticate }, async (req, reply) => {
+      const task = new app.objection.models.task();
+      const [statuses, users, labels] = await Promise.all([
+        app.objection.models.status.query(),
+        app.objection.models.user.query(),
+        app.objection.models.label.query(),
+      ]);
+
+      reply.render('tasks/new', {
+        task, statuses, users, labels,
+      });
+      return reply;
+    })
+    .get('/tasks/:id', { name: 'taskPage', preValidation: app.authenticate }, async (req, reply) => {
+      const { id } = req.params;
+      const task = await app.objection.models.task.query().findById(id).withGraphFetched('[status, creator, executor, labels]');
+      reply.render('tasks/specificTask', { task });
+      return reply;
+    })
+    .get('/tasks/:id/edit', { name: 'editTask', preValidation: app.authenticate }, async (req, reply) => {
+      const { id } = req.params;
+      const task = await app.objection.models.task.query().findById(id);
+      const [statuses, users, labels, selectedLabels] = await Promise.all([
+        app.objection.models.status.query(),
+        app.objection.models.user.query(),
+        app.objection.models.label.query(),
+        task.$relatedQuery('labels').select('labels.id'),
+      ]);
+
+      const selectedLabelsIds = selectedLabels.map((label) => label.id);
+      reply.render('tasks/edit', {
+        task, statuses, users, labels, selectedLabelsIds,
+      });
+      return reply;
+    })
+    .post('/tasks', { preValidation: app.authenticate }, async (req, reply) => {
+      const { id: creatorId } = req.user;
+      const task = new app.objection.models.task();
+
+      const {
+        name, description, statusId, executorId, labels: labelsList = [],
+      } = req.body.data;
+
+      const taskData = {
+        name,
+        description,
+        statusId,
+        executorId,
+        creatorId,
+      };
+
+      const labelsIds = labelsList.map((id) => ({ id: parseInt(id, 10) }));
+
+      task.$set({ ...taskData, labels: labelsIds });
+
+      try {
+        const validTask = await app.objection.models.task.fromJson(taskData);
+
+        await app.objection.models.task.transaction(async (trx) => {
+          const newTask = {
+            ...validTask,
+            labels: labelsIds,
+          };
+
+          await app.objection.models.task.query(trx).insertGraph(newTask, { relate: ['labels'] });
+        });
+
+        req.flash('info', i18next.t('flash.tasks.create.success'));
+        reply.redirect(app.reverse('tasks'));
+      } catch (errors) {
         const [statuses, users, labels] = await Promise.all([
           app.objection.models.status.query(),
           app.objection.models.user.query(),
           app.objection.models.label.query(),
         ]);
-        const selectedLabelsIds = [];
-
+        req.flash('error', i18next.t('flash.tasks.create.error'));
         reply.render('tasks/new', {
-          task, statuses, users, labels, selectedLabelsIds,
+          task, statuses, users, labels, errors: errors.data ?? {},
         });
-      } else {
-        req.flash('error', i18next.t('flash.authError'));
-        reply.render('welcome/index');
       }
       return reply;
     })
-    .get('/tasks/:id', async (req, reply) => {
-      if (req.isAuthenticated()) {
-        const { id } = req.params;
-        const task = await app.objection.models.task.query().findById(id).withGraphFetched('[status, creator, executor, labels]');
-        reply.render('tasks/specificTask', { task });
-      } else {
-        req.flash('error', i18next.t('flash.authError'));
-        reply.render('welcome/index');
-      }
-      return reply;
-    })
-    .get('/tasks/:id/edit', async (req, reply) => {
-      if (req.isAuthenticated()) {
-        const { id } = req.params;
-        const task = await app.objection.models.task.query().findById(id);
-        const [statuses, users, labels, selectedLabels] = await Promise.all([
+    .patch('/tasks/:id', { name: 'updateTask', preValidation: app.authenticate }, async (req, reply) => {
+      const { id } = req.params;
+      const { id: creatorId } = req.user;
+
+      const task = new app.objection.models.task();
+
+      const {
+        name, description, statusId, executorId, labels: labelsList = [],
+      } = req.body.data;
+
+      const taskData = {
+        name,
+        description,
+        statusId,
+        executorId,
+        creatorId,
+      };
+
+      const labelsIds = labelsList.map((id) => ({ id: parseInt(id, 10) }));
+
+      task.set({ ...taskData, labels: labelsIds });
+
+      try {
+        const validTask = await app.objection.models.task.fromJson(taskData);
+
+        await app.objection.models.task.transaction(async (trx) => {
+          const updatedTask = {
+            id,
+            ...validTask,
+            labels: labelsIds,
+          };
+
+          await app.objection.models.task.
+            query(trx)
+            .upsertGraph(updatedTask, { relate: true, unrelate: true });
+        });
+
+        req.flash('info', i18next.t('flash.tasks.edit.success'));
+        reply.redirect(app.reverse('tasks'));
+      } catch (errors) {
+        const [statuses, users, labels] = await Promise.all([
           app.objection.models.status.query(),
           app.objection.models.user.query(),
           app.objection.models.label.query(),
-          task.$relatedQuery('labels').select('labels.id'),
         ]);
 
-        const selectedLabelsIds = selectedLabels.map((label) => label.id);
+        req.flash('error', i18next.t('flash.tasks.edit.error'));
         reply.render('tasks/edit', {
-          task, statuses, users, labels, selectedLabelsIds,
+          task, statuses, users, labels, errors: errors.data ?? {},
         });
-      } else {
-        req.flash('error', i18next.t('flash.authError'));
-        reply.render('welcome/index');
       }
       return reply;
     })
-    .post('/tasks', async (req, reply) => {
-      if (req.isAuthenticated()) {
-        const task = new app.objection.models.task();
-        const taskData = req.body.data;
-        task.$set(taskData);
+    .delete('/tasks/:id', { name: 'deleteTask', preValidation: app.authenticate }, async (req, reply) => {
+      const { id } = req.params;
+      const { id: currentUserId } = req.user;
 
-        try {
-          const currentUserId = req.user.id;
-          const validTask = await app.objection.models.task.fromJson({
-            ...taskData,
-            statusId: Number(taskData.statusId),
-            creatorId: Number(currentUserId),
-            executorId: Number(taskData.executorId),
-          });
-
-          await app.objection.models.task.transaction(async (trx) => {
-            const insertedTask = await app.objection.models.task.query(trx).insert(validTask);
-            const taskId = insertedTask.id;
-            const labelsIds = taskData.labels;
-
-            const insertPromises = labelsIds.map((labelId) => (
-              app.objection.models.taskLabel.query(trx).insert({
-                taskId,
-                labelId,
-              })));
-            await Promise.all(insertPromises);
-          });
-
-          req.flash('info', i18next.t('flash.tasks.create.success'));
-          reply.redirect(app.reverse('root'));
-        } catch (errors) {
-          console.log('DLSKLSALKDSKALDKLSADKLSAKLDASKL', errors);
-          const [statuses, users, labels] = await Promise.all([
-            app.objection.models.status.query(),
-            app.objection.models.user.query(),
-            app.objection.models.label.query(),
-          ]);
-          req.flash('error', i18next.t('flash.tasks.create.error'));
-          reply.render('tasks/new', {
-            task, statuses, users, labels, errors: errors.data ?? {},
-          });
-        }
-      } else {
-        req.flash('error', i18next.t('flash.authError'));
-        reply.render('welcome/index');
+      const currentTask = app.objection.models.task.query().findById(id);
+      if (currentUserId !== currentTask.creatorId) {
+        req.flash('error', i18next.t('flash.tasks.delete.wrongUser'));
+        return reply.redirect(app.reverse('tasks'));
       }
-      return reply;
-    })
-    .patch('/tasks/:id', async (req, reply) => {
-      if (req.isAuthenticated()) {
-        const { id } = req.params;
-        const task = await app.objection.models.task.query().findById(id);
-        const taskData = req.body.data;
-        task.$set(taskData);
 
-        try {
-          const labelIds = taskData.labels || [];
+      try {
+        await app.objection.models.tasks.transaction(async (trx) => {
+          await currentTask.$query(trx).delete();
+        });
 
-          const taskLabels = await task.$relatedQuery('labels');
-          const currentLabelsIds = taskLabels.map((label) => label.id);
-
-          const labelsToAdd = labelIds.filter((labelId) => !currentLabelsIds.includes(labelId));
-          const labelsToRemove = currentLabelsIds.filter((labelId) => !labelIds.includes(labelId));
-
-          await app.objection.models.task.transaction(async (trx) => {
-            await app.objection.models.taskLabel.query(trx)
-              .delete()
-              .where('taskId', id)
-              .whereIn('labelId', labelsToRemove);
-
-            labelsToAdd.forEach(async (labelId) => {
-              await app.objection.models.taskLabel.query(trx).insert({
-                taskId: id,
-                labelId,
-              });
-            });
-
-            const validTask = await app.objection.models.task.fromJson({
-              ...taskData,
-              statusId: Number(taskData.statusId),
-              creatorId: task.creatorId,
-              executorId: Number(taskData.executorId),
-            });
-
-            await app.objection.models.task.query(trx).findById(id).patch(validTask);
-          });
-
-          req.flash('info', i18next.t('flash.tasks.edit.success'));
-          reply.redirect(app.reverse('root'));
-        } catch (errors) {
-          const [statuses, users, labels, selectedLabels] = await Promise.all([
-            app.objection.models.status.query(),
-            app.objection.models.user.query(),
-            app.objection.models.label.query(),
-            task.$relatedQuery('labels').select('labels.id'),
-          ]);
-
-          const selectedLabelsIds = selectedLabels.map((label) => label.id);
-
-          req.flash('error', i18next.t('flash.tasks.edit.error'));
-          reply.render('tasks/edit', {
-            task, statuses, users, labels, selectedLabelsIds, errors: errors.data ?? {},
-          });
-        }
-      } else {
-        req.flash('error', i18next.t('flash.authError'));
-        reply.render('welcome/index');
+        req.flash('info', i18next.t('flash.tasks.delete.success'));
+        reply.redirect(app.reverse('tasks'));
+      } catch (errors) {
+        req.flash('error', i18next.t('flash.tasks.delete.error'));
+        reply.redirect(app.reverse('tasks'));
       }
-      return reply;
-    })
-    .delete('/tasks/:id', async (req, reply) => {
-      if (req.isAuthenticated()) {
-        const { id } = req.params;
-        const currentUserId = req.user.id;
-        const currentTask = app.objection.models.task.query().findById(id);
-        if (currentUserId === currentTask.creatorId) {
-          await app.objection.models.task.transaction(async (trx) => {
-            await currentTask.$relatedQuery('labels', trx).unrelate();
-            await app.objection.models.task.query(trx).deleteById(id);
-          });
 
-          req.flash('success', i18next.t('flash.tasks.delete.success'));
-          reply.redirect(app.reverse('root'));
-        } else {
-          req.flash('error', i18next.t('flash.tasks.delete.error'));
-          reply.render('welcome/index');
-        }
-      } else {
-        req.flash('error', i18next.t('flash.authError'));
-        reply.render('welcome/index');
-      }
       return reply;
     });
 };
