@@ -75,7 +75,7 @@ module.exports = class Task extends unique(BaseModel) {
       queryBuilder.where('statusId', statusId);
     },
     filterLabel(queryBuilder, labelId) {
-      queryBuilder.where('labelId', labelId);
+      queryBuilder.join('tasks_labels', 'tasks.id', 'tasks_labels.taskId').where('tasks_labels.labelId', labelId);
     },
   };
 };
