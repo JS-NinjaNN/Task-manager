@@ -2,7 +2,7 @@ import fastify from 'fastify';
 import init from '../server/plugin.js';
 import { prepareDataFaker, makeLogin } from './helpers/index.js';
 
-describe('Test statuses CRUD', () => {
+describe('Labels CRUD', () => {
   let app;
   let knex;
   let models;
@@ -25,29 +25,28 @@ describe('Test statuses CRUD', () => {
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('statuses'),
+      url: app.reverse('labels'),
       cookies: cookie,
     });
 
     expect(response.statusCode).toBe(200);
   });
 
-  it('newStatus', async () => {
+  it('newLabel', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('newStatus'),
+      url: app.reverse('newLabel'),
       cookies: cookie,
     });
 
     expect(response.statusCode).toBe(200);
   });
 
-  it('createStatus', async () => {
-    const params = mockData.statuses.new;
-
+  it('createLabel', async () => {
+    const params = mockData.labels.new;
     const response = await app.inject({
       method: 'POST',
-      url: app.reverse('statuses'),
+      url: app.reverse('labels'),
       payload: {
         data: params,
       },
@@ -55,48 +54,52 @@ describe('Test statuses CRUD', () => {
     });
 
     expect(response.statusCode).toBe(302);
-    const status = await models.status.query().findOne({ name: params.name });
-    expect(status).toMatchObject(params);
+    const label = await models.label.query().findOne({ name: params.name });
+    expect(label).toMatchObject(params);
   });
 
-  it('updateStatus', async () => {
-    const modifiedStatus = 'Avada-kedavra';
-    const params = mockData.statuses.existing.update;
+  it('updateLabel', async () => {
+    const modifiedLabel = 'Avada-kedavra';
+    const params = mockData.labels.existing.update;
 
-    const status = await models.status.query().findOne({ name: params.name });
+    const label = await models.label.query().findOne({ name: params.name });
 
     const response = await app.inject({
       method: 'PATCH',
-      url: app.reverse('updateStatus', { id: status.id }),
+      url: app.reverse('updateLabel', { id: label.id }),
       payload: {
         data: {
-          name: modifiedStatus,
+          name: modifiedLabel,
         },
       },
       cookies: cookie,
     });
     expect(response.statusCode).toBe(302);
 
-    const refetchedStatus = await status.$query();
-    expect(refetchedStatus.name).toEqual(modifiedStatus);
+    const refetchedLabel = await label.$query();
+    expect(refetchedLabel.name).toEqual(modifiedLabel);
   });
 
-  it('deleteStatus', async () => {
-    const params = mockData.statuses.existing.delete;
-    const status = await models.status.query().findOne({ name: params.name });
+  it('deleteLabel', async () => {
+    const params = mockData.labels.existing.delete;
+
+    const label = await models.label.query().findOne({ name: params.name });
     const response = await app.inject({
       method: 'DELETE',
-      url: app.reverse('deleteStatus', { id: status.id }),
+      url: app.reverse('deleteLabel', { id: label.id }),
       cookies: cookie,
     });
     expect(response.statusCode).toBe(302);
-    const deletedStatus = await models.status.query().findById(status.id);
-    expect(deletedStatus).toBeUndefined();
+
+    const deletedLabel = await models.label.query().findById(label.id);
+    expect(deletedLabel).toBeUndefined();
   });
 
   afterAll(async () => {
     // await knex('users').truncate();
-    // await knex('statuses').truncate();
+    // await knex('labels').truncate();
+    // await knex('tasks').truncate();
+    // await knex('tasks_labels').truncate();
     await app.close();
   });
 });

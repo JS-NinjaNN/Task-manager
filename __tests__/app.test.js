@@ -11,6 +11,7 @@ describe('requests', () => {
   let app;
 
   beforeAll(async () => {
+    // @ts-ignore
     app = fastify({
       exposeHeadRoutes: false,
       logger: { target: 'pino-pretty' },

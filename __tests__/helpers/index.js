@@ -3,9 +3,10 @@
 import { URL } from 'url';
 import fs from 'fs';
 import path from 'path';
-import { faker } from '@faker-js/faker';
 
-import encrypt from '../../server/lib/secure.cjs';
+import {
+  generateUsers, generateStatuses, generateTasks, generateLabels, generateTasksLabels,
+} from './faker.js';
 
 // TODO: использовать для фикстур https://github.com/viglucci/simple-knex-fixtures
 
@@ -13,47 +14,60 @@ const getFixturePath = (filename) => path.join('..', '..', '__fixtures__', filen
 const readFixture = (filename) => fs.readFileSync(new URL(getFixturePath(filename), import.meta.url), 'utf-8').trim();
 const getFixtureData = (filename) => JSON.parse(readFixture(filename));
 
-const createRandomUser = () => ({
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-  email: faker.internet.email(),
-  password: faker.internet.password(),
-});
-
-const createRandomUserData = () => ({
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
-  email: faker.internet.email(),
-  passwordDigest: encrypt(faker.internet.password()),
-});
-
 const getTestData = () => getFixtureData('testData.json');
 
-const prepareData = async (app, data) => {
+const prepareData = async (app) => {
   const { knex } = app.objection;
 
-  const tables = Object.keys(data);
-
-  return Promise.all(tables.map((tableName) => knex(tableName).insert(data[tableName])));
+  // получаем данные из фикстур и заполняем БД
+  await knex('users').insert(getFixtureData('users.json'));
 };
 
-const getRandomUsersData = (count = 10) => faker.helpers.multiple(createRandomUserData, { count });
+const prepareDataFaker = async (app) => {
+  const { knex } = app.objection;
+  const userMocks = generateUsers();
+  const statusesMocks = generateStatuses();
+  const labelsMocks = generateLabels();
+  // получаем данные из фикстур и заполняем БД
+  await knex('users').insert(userMocks.seeds);
+  await knex('statuses').insert(statusesMocks.seeds);
+  await knex('labels').insert(labelsMocks.seeds);
 
-const createRandomStatusData = () => {
-  const statusName = faker.word.adjective();
+  const users = await knex('users');
+  const statuses = await knex('statuses');
+  const tasksMocks = generateTasks(users, statuses);
+
+  await knex('tasks').insert(tasksMocks.seeds);
+
+  const tasks = await knex('tasks');
+  const labels = await knex('labels');
+  const tasksLabelsMocks = generateTasksLabels(tasks, labels);
+
+  await knex('tasks_labels').insert(tasksLabelsMocks.seeds);
   return {
-    name: statusName,
+    users: userMocks,
+    statuses: statusesMocks,
+    tasks: tasksMocks,
+    labels: labelsMocks,
   };
 };
 
-const getRandomStatuses = (count = 10) => faker.helpers.multiple(createRandomStatusData, { count });
+const makeLogin = async (app, credentials) => {
+  const response = await app.inject({
+    method: 'POST',
+    url: app.reverse('session'),
+    payload: {
+      data: credentials,
+    },
+  });
+
+  const [sessionCookie] = response.cookies;
+  const { name, value } = sessionCookie;
+  const cookie = { [name]: value };
+
+  return cookie;
+};
 
 export {
-  getTestData,
-  prepareData,
-  createRandomUser,
-  createRandomUserData,
-  getRandomUsersData,
-  createRandomStatusData,
-  getRandomStatuses,
+  getTestData, prepareData, prepareDataFaker, makeLogin,
 };
