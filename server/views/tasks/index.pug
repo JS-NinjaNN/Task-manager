@@ -4,7 +4,6 @@ block header
   h1.display-4.fw-bold= t('views.tasks.title')
 
 block content
-  - isTasksEmpty = (tasks) => _.isEmpty(tasks)
   a.btn.btn-primary.me-1.mb-3(href='/tasks/new')= t('views.tasks.createBtn')
 
   .card.shadow-sm
