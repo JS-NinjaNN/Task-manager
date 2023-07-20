@@ -82,73 +82,35 @@ export default {
       },
     },
     views: {
-      session: {
-        new: {
-          signIn: 'Вход',
-          submit: 'Войти',
-        },
-      },
-      user: {
-        id: 'ID',
-        firstName: 'Имя',
-        lastName: 'Фамилия',
-        email: 'Email',
-        createdAt: 'Дата создания',
-        password: 'Пароль',
-        new: {
-          submit: 'Сохранить',
-          signUp: 'Регистрация',
-        },
-        edit: {
-          submit: 'Редактировать',
-        },
-        delete: {
-          submit: 'Удалить',
-        },
-      },
-      status: {
+      statuses: {
+        title: 'Статусы',
         id: 'ID',
         name: 'Наименование',
         createdAt: 'Дата создания',
-        new: {
-          title: 'Создание статуса',
-          submit: 'Создать',
+        action: {
+          create: 'Создать статус',
+          delete: 'Удалить',
+          change: 'Изменить',
+        },
+        form: {
+          create: 'Создать',
         },
         edit: {
           title: 'Изменение статуса',
-          submit: 'Редактировать',
-        },
-        delete: {
-          submit: 'Удалить',
         },
       },
-      task: {
-        id: 'ID',
-        name: 'Наименование',
-        description: 'Описание',
-        status: 'Статус',
-        statusId: 'Статус',
-        creator: 'Автор',
-        executor: 'Исполнитель',
-        executorId: 'Исполнитель',
-        labels: 'Метки',
-        createdAt: 'Дата создания',
-        new: {
-          title: 'Создание задачи',
-          submit: 'Создать',
+      labels: {
+        title: 'Метки',
+        createBtn: 'Создать метку',
+        table: {
+          id: 'ID',
+          name: 'Наименование',
+          createdAt: 'Время создания',
+          action: {
+            change: 'Изменить',
+            delete: 'Удалить',
+          },
         },
-        edit: {
-          title: 'Изменение задачи',
-          submit: 'Изменить',
-        },
-        delete: {
-          submit: 'Удалить',
-        },
-      },
-      label: {
-        id: 'ID',
-        name: 'Наименование',
-        createdAt: 'Дата создания',
         new: {
           title: 'Создание метки',
           submit: 'Создать',
@@ -157,15 +119,88 @@ export default {
           title: 'Изменение метки',
           submit: 'Изменить',
         },
-        delete: {
-          submit: 'Удалить',
+      },
+      form: {
+        placeholders: {
+          email: 'Email',
+          password: 'Пароль',
+          name: 'Наименование',
+          firstName: 'Имя',
+          lastName: 'Фамилия',
+          description: 'Описание',
+          statusId: 'Статус',
+          executorId: 'Исполнитель',
+          labels: 'Метки',
         },
+        filter: {
+          status: 'Статус',
+          executor: 'Исполнитель',
+          isCreatorUser: 'Только мои задачи',
+          submit: 'Показать',
+          label: 'Метка',
+        },
+      },
+      session: {
+        new: {
+          signIn: 'Вход',
+          submit: 'Войти',
+        },
+      },
+      users: {
+        id: 'ID',
+        firstName: 'Имя',
+        lastName: 'Фамилия',
+        fullName: 'Полное имя',
+        email: 'Email',
+        createdAt: 'Дата создания',
+        new: {
+          submit: 'Сохранить',
+          signUp: 'Регистрация',
+        },
+        action: {
+          change: 'Изменить',
+          delete: 'Удалить',
+        },
+        title: 'Пользователи',
       },
       welcome: {
         index: {
           hello: 'Привет от Хекслета!',
           description: 'Практические курсы по программированию',
           more: 'Узнать Больше',
+        },
+      },
+      tasks: {
+        title: 'Задачи',
+        createBtn: 'Создать задачу',
+        edit: {
+          title: 'Изменение задачи',
+          submit: 'Изменить',
+        },
+        table: {
+          action: {
+            change: 'Изменить',
+            delete: 'Удалить',
+          },
+          id: 'ID',
+          name: 'Наименование',
+          status: 'Статус',
+          author: 'Автор',
+          executor: 'Исполнитель',
+          createdAt: 'Дата создания',
+        },
+        new: {
+          title: 'Создание задачи',
+          submit: 'Создать',
+        },
+        page: {
+          action: {
+            change: 'Изменить задачу',
+            delete: 'Удалить задачу',
+          },
+          creator: 'Создатель',
+          executor: 'Исполнитель',
+          createdAt: 'Дата создания',
         },
       },
       actions: 'Действия',

@@ -17,20 +17,20 @@ block content
             = label.name
       .d-flex.flex-wrap.mb-3
         span.text-muted.me-2
-          = t('views.task.creator')
+          = t('views.tasks.page.creator')
         span
           = `${task.creator.firstName} ${task.creator.lastName}`
       .d-flex.flex-wrap.mb-3
         span.text-muted.me-2
-          = t('views.task.executor')
+          = t('views.tasks.page.executor')
         span
           = `${task.executor.firstName} ${task.executor.lastName}`
       .d-flex.flex-wrap.mb-3
         span.text-muted.me-2
-          = t('views.task.createdAt')
+          = t('views.tasks.page.createdAt')
         span
           = formatDate(task.createdAt)
       .d-flex.flex-wrap
         a(href=`/tasks/${task.id}/edit`).btn.btn-primary.me-1
-          = t('views.task.edit.submit')
-        +buttonTo(`/tasks/${task.id}`, 'delete')(class="btn btn-danger" value=t('views.task.delete.submit'))
+          = t('views.tasks.page.action.change')
+        +buttonTo(`/tasks/${task.id}`, 'delete')(class="btn btn-danger" value=t('views.tasks.page.action.delete'))

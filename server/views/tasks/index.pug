@@ -1,11 +1,11 @@
 extends ../layouts/application.pug
 
 block header
-  h1.display-4.fw-bold= t('layouts.application.tasks')
+  h1.display-4.fw-bold= t('views.tasks.title')
 
 block content
   - isTasksEmpty = (tasks) => _.isEmpty(tasks)
-  a.btn.btn-primary.me-1(href='/tasks/new')= t('layouts.application.createTask')
+  a.btn.btn-primary.me-1.mb-3(href='/tasks/new')= t('views.tasks.createBtn')
 
   .card.shadow-sm
     .card-body.p-4
@@ -24,13 +24,13 @@ block content
     table.table.table-borderless.table-striped.mt-5.bg-white
       thead
         tr
-          th= t('views.task.id')
-          th= t('views.task.name')
-          th= t('views.task.status')
-          th= t('views.task.creator')
-          th= t('views.task.executor')
-          th= t('views.task.createdAt')
-          th= t('views.actions')
+          th.py-3= t('views.tasks.table.id')
+          th.py-3= t('views.tasks.table.name')
+          th.py-3= t('views.tasks.table.status')
+          th.py-3= t('views.tasks.table.author')
+          th.py-3= t('views.tasks.table.executor')
+          th.py-3= t('views.tasks.table.createdAt')
+          th.py-3= t('views.actions')
       tbody
         each task in tasks
           tr
@@ -43,5 +43,5 @@ block content
             td= task.createdAt
             td
               .d-flex.flex-wrap
-                a.btn.btn-primary.me-1(href=`/tasks/${task.id}/edit`)= t('views.task.edit.submit')
-                +buttonTo(`/tasks/${task.id}`, 'delete')(class="btn btn-danger" value=t('views.task.delete.submit'))
+                a.btn.btn-primary.me-1(href=`/tasks/${task.id}/edit`)= t('views.tasks.table.action.change')
+                +buttonTo(`/tasks/${task.id}`, 'delete')(class="btn btn-danger" value=t('views.tasks.table.action.delete'))

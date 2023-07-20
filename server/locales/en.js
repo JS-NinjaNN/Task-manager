@@ -18,6 +18,9 @@ export default {
           error: 'Failed to register',
           success: 'User registered successfully',
         },
+        edit: {
+          success: 'User successfully edited',
+        },
         delete: {
           success: 'User successfully deleted',
           error: 'Failed to delete user',
@@ -82,95 +85,128 @@ export default {
       },
     },
     views: {
+      statuses: {
+        title: 'Статусы',
+        id: 'ID',
+        name: 'Наименование',
+        createdAt: 'Дата создания',
+        action: {
+          create: 'Создать статус',
+          delete: 'Удалить',
+          change: 'Изменить',
+        },
+        form: {
+          create: 'Создать',
+        },
+        edit: {
+          title: 'Изменение статуса',
+        },
+      },
+      labels: {
+        title: 'Метки',
+        createBtn: 'Создать метку',
+        table: {
+          id: 'ID',
+          name: 'Наименование',
+          createdAt: 'Время создания',
+          action: {
+            change: 'Изменить',
+            delete: 'Удалить',
+          },
+        },
+        new: {
+          title: 'Создание метки',
+          submit: 'Создать',
+        },
+        edit: {
+          title: 'Изменение метки',
+          submit: 'Изменить',
+        },
+      },
+      form: {
+        placeholders: {
+          email: 'Email',
+          password: 'Пароль',
+          name: 'Наименование',
+          firstName: 'Имя',
+          lastName: 'Фамилия',
+          description: 'Описание',
+          statusId: 'Статус',
+          executorId: 'Исполнитель',
+          labels: 'Метки',
+        },
+        filter: {
+          status: 'Статус',
+          executor: 'Исполнитель',
+          isCreatorUser: 'Только мои задачи',
+          submit: 'Показать',
+          label: 'Метка',
+        },
+      },
       session: {
         new: {
-          signIn: 'Login',
-          submit: 'Login',
+          signIn: 'Вход',
+          submit: 'Войти',
         },
       },
-      user: {
+      users: {
         id: 'ID',
-        firstName: 'First name',
-        lastName: 'Last name',
+        firstName: 'Имя',
+        lastName: 'Фамилия',
+        fullName: 'Полное имя',
         email: 'Email',
-        createdAt: 'Created at',
-        password: 'Password',
+        createdAt: 'Дата создания',
         new: {
-          submit: 'Save',
-          signUp: 'Sign Up',
+          submit: 'Сохранить',
+          signUp: 'Регистрация',
         },
-        edit: {
-          submit: 'Edit',
+        action: {
+          change: 'Изменить',
+          delete: 'Удалить',
         },
-        delete: {
-          submit: 'Delete',
-        },
-      },
-      status: {
-        id: 'ID',
-        name: 'Title',
-        createdAt: 'Created at',
-        new: {
-          title: 'Create a status',
-          submit: 'Create',
-        },
-        edit: {
-          title: 'Changing the status',
-          submit: 'Edit',
-        },
-        delete: {
-          submit: 'Delete',
-        },
-      },
-      task: {
-        id: 'ID',
-        name: 'Title',
-        description: 'Description',
-        status: 'Status',
-        statusId: 'Status',
-        creator: 'Creator',
-        executor: 'Executor',
-        executorId: 'Executor',
-        labels: 'Labels',
-        createdAt: 'Created at',
-        new: {
-          title: 'Create a task',
-          submit: 'Create',
-        },
-        edit: {
-          title: 'Changing the task',
-          submit: 'Edit',
-        },
-        delete: {
-          submit: 'Delete',
-        },
-      },
-      label: {
-        id: 'ID',
-        name: 'Title',
-        createdAt: 'Created at',
-        new: {
-          title: 'Create a label',
-          submit: 'Create',
-        },
-        edit: {
-          title: 'Changing the label',
-          submit: 'Edit',
-        },
-        delete: {
-          submit: 'Delete',
-        },
+        title: 'Пользователи',
       },
       welcome: {
         index: {
-          hello: 'Hello from Hexlet!',
-          description: 'Online programming school',
-          more: 'Learn more',
+          hello: 'Привет от Хекслета!',
+          description: 'Практические курсы по программированию',
+          more: 'Узнать Больше',
+        },
+      },
+      tasks: {
+        title: 'Задачи',
+        createBtn: 'Создать задачу',
+        edit: {
+          title: 'Изменение задачи',
+          submit: 'Изменить',
+        },
+        table: {
+          action: {
+            change: 'Изменить',
+            delete: 'Удалить',
+          },
+          id: 'ID',
+          name: 'Наименование',
+          status: 'Статус',
+          author: 'Автор',
+          executor: 'Исполнитель',
+          createdAt: 'Дата создания',
+        },
+        new: {
+          title: 'Создание задачи',
+          submit: 'Создать',
+        },
+        page: {
+          action: {
+            change: 'Изменить задачу',
+            delete: 'Удалить задачу',
+          },
+          creator: 'Создатель',
+          executor: 'Исполнитель',
+          createdAt: 'Дата создания',
         },
       },
       actions: 'Actions',
     },
-    email: 'Email',
-    password: 'Password',
   },
 };

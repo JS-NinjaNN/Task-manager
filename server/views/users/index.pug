@@ -1,24 +1,26 @@
 extends ../layouts/application.pug
 
 block header
-  h1.display-4.fw-bold.mt-4= t('layouts.application.users')
+  h1.display-4.fw-bold.mt-4= t('views.users.title')
 
 block content
   .table-responsive
     table.table.table-striped
       thead
         tr
-          th= t('views.user.id')
-          th= t('views.user.email')
-          th= t('views.user.createdAt')
+          th= t('views.users.id')
+          th= t('views.users.fullName')
+          th= t('views.users.email')
+          th= t('views.users.createdAt')
           th= t('views.actions')
       tbody
         each user in users
           tr
             td= user.id
+            th= `${user.firstName} ${user.lastName}`
             td= user.email
             td= formatDate(user.createdAt)
             td
               .d-flex.flex-wrap
-                a.btn.btn-primary.me-1(href=`/users/${user.id}/edit`)= t('views.user.edit.submit')
-                +buttonTo(`/users/${user.id}`, 'delete')(class="btn btn-danger" value=t('views.user.delete.submit'))
+                a.btn.btn-primary.me-1(href=`/users/${user.id}/edit`)= t('views.users.action.change')
+                +buttonTo(`/users/${user.id}`, 'delete')(class="btn btn-danger" value=t('views.users.action.delete'))

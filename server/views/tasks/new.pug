@@ -1,7 +1,7 @@
 extends ../layouts/application.pug
 
 block header
-  h1.display-4.fw-bold= t('views.task.new.title')
+  h1.display-4.fw-bold= t('views.tasks.new.title')
 
 block content
   +formFor()(action=route('tasks') method='post')
@@ -10,4 +10,4 @@ block content
     +select(task, 'statusId', errors, statuses)
     +select(task, 'executorId', errors, users)
     +select(task, 'labels', errors, labels, true)
-    +submit(task)(value=t('views.task.new.submit'))
+    +submit(task)(value=t('views.tasks.new.submit'))

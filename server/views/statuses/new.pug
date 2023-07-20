@@ -1,9 +1,9 @@
 extends ../layouts/application.pug
 
 block header
-  h1.display-4.fw-bold.mt-4= t('views.status.new.title')
+  h1.display-4.fw-bold.mt-4= t('views.statuses.action.create')
 
 block content
   +formFor()(action=route('statuses') method='post')
     +input(status, 'name', errors)(type='text')
-    +submit(status)(value=t('views.status.new.submit'))
+    +submit(status)(value=t('views.statuses.form.create'))

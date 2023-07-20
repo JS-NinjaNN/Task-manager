@@ -1,7 +1,7 @@
 extends ../layouts/application.pug
 
 block header
-  = t('layouts.application.labels')
+  = t('views.labels.title')
 
 block content
   a.btn.btn-primary.mb-5(href=route('newLabel'))= t('layouts.application.createLabel')
@@ -9,9 +9,9 @@ block content
     table.table.table-borderless.table-striped.mt-5.bg-white
       thead
         tr
-          th= t('views.label.id')
-          th= t('views.label.name')
-          th= t('views.label.createdAt')
+          th.py-3= t('views.labels.table.id')
+          th.py-3= t('views.labels.table.name')
+          th.py-3= t('views.labels.table.createdAt')
           th= t('views.actions')
       tbody
         each label in labels
@@ -21,5 +21,5 @@ block content
             td= formatDate(label.createdAt)
             td
               .d-flex.flex-wrap
-                a.btn.btn-primary.me-1(href=`/labels/${label.id}/edit`)= t('views.label.edit.submit')
-                +buttonTo(`/labels/${label.id}`, 'delete')(class="btn btn-danger" value=t('views.label.delete.submit'))
+                a.btn.btn-primary.me-1(href=`/labels/${label.id}/edit`)= t('views.labels.table.action.change')
+                +buttonTo(`/labels/${label.id}`, 'delete')(class="btn btn-danger" value=t('views.labels.table.action.delete'))
