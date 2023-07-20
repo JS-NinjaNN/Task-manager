@@ -37,7 +37,7 @@ export default (app) => {
 
       return reply;
     })
-    .patch('/statuses/:id', { preValidation: app.authenticate }, async (req, reply) => {
+    .patch('/statuses/:id', { name: 'updateStatus', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const status = await app.objection.models.status.query().findById(id);
 

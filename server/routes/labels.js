@@ -14,7 +14,7 @@ export default (app) => {
       reply.render('labels/new', { label });
       return reply;
     })
-    .get('/labels/:id/edit', { name: 'editLable', preValidation: app.authenticate }, async (req, reply) => {
+    .get('/labels/:id/edit', { name: 'editLabel', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const label = await app.objection.models.label.query().findById(id);
       reply.render('labels/edit', { label });
@@ -32,12 +32,13 @@ export default (app) => {
         req.flash('info', i18next.t('flash.labels.create.success'));
         reply.redirect(app.reverse('labels'));
       } catch (errors) {
+        console.log('LSADKLALKDSAKLDKALSDLKSA', errors);
         req.flash('error', i18next.t('flash.labels.create.error'));
         reply.render('labels/new', { label, errors: errors.data ?? {} });
       }
       return reply;
     })
-    .patch('/labels/:id', { preValidation: app.authenticate }, async (req, reply) => {
+    .patch('/labels/:id', { name: 'updateLabel', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const { data } = req.body;
       const label = await app.objection.models.label.query().findById(id);
