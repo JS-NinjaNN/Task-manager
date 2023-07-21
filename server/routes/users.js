@@ -20,7 +20,7 @@ export default (app) => {
 
       if (Number(id) !== currentUserId) {
         req.flash('error', i18next.t('flash.wrongUserError'));
-        return reply.redirect(app.reverse('users'));
+        return reply.code(403).redirect(app.reverse('users'));
       }
 
       const user = await app.objection.models.user.query().findById(id);
@@ -44,10 +44,16 @@ export default (app) => {
       }
       return reply;
     })
-    .patch('/users/:id', { preValidation: app.authenticate }, async (req, reply) => {
+    .patch('/users/:id', { name: 'updateUser', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
       const { data } = req.body;
       const user = await app.objection.models.user.query().findById(id);
+      const currentUserId = req.user.id;
+
+      if (Number(id) !== currentUserId) {
+        req.flash('error', i18next.t('flash.wrongUserError'));
+        return reply.code(403).redirect(app.reverse('users'));
+      }
 
       try {
         const validUser = await app.objection.models.user.fromJson(data);
@@ -56,7 +62,7 @@ export default (app) => {
         reply.redirect(app.reverse('users'));
       } catch (errors) {
         req.flash('error', i18next.t('flash.users.edit.error'));
-        user.$set(req.body.user);
+        user.$set(data);
         reply.render('users/edit', { user, errors: errors.data ?? {} });
       }
 
@@ -69,13 +75,12 @@ export default (app) => {
 
       if (currentUserId !== Number(id)) {
         req.flash('error', i18next.t('flash.wrongUserError'));
-        return reply.redirect(app.reverse('users'));
+        return reply.code(403).redirect(app.reverse('users'));
       }
 
       if (relatedTasks.length) {
         req.flash('error', i18next.t('flash.authError'));
-        reply.render('welcome/index');
-        return reply;
+        return reply.code(409).redirect(app.reverse('users'));
       }
 
       try {
