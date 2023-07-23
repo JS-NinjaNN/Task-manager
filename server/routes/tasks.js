@@ -11,30 +11,26 @@ export default (app) => {
         executor, status, label, isCreatorUser,
       } = query;
 
-      try {
-        const tasksQuery = app.objection.models.task.query().withGraphFetched('[status, creator, executor, labels]');
+      const tasksQuery = app.objection.models.task.query().withGraphJoined('[status, creator, executor, labels]');
 
-        tasksQuery.skipUndefined().modify('filterExecutor', executor || undefined);
-        tasksQuery.skipUndefined().modify('filterStatus', status || undefined);
-        tasksQuery.skipUndefined().modify('filterLabel', label || undefined);
+      tasksQuery.skipUndefined().modify('filterExecutor', executor || undefined);
+      tasksQuery.skipUndefined().modify('filterStatus', status || undefined);
+      tasksQuery.skipUndefined().modify('filterLabel', label || undefined);
 
-        if (isCreatorUser === 'on') {
-          tasksQuery.skipUndefined().modify('filterCreator', id || undefined);
-        }
-
-        const [tasks, users, statuses, labels] = await Promise.all([
-          tasksQuery,
-          app.objection.models.user.query(),
-          app.objection.models.status.query(),
-          app.objection.models.label.query(),
-        ]);
-
-        reply.render('tasks/index', {
-          tasks, statuses, users, labels, query,
-        });
-      } catch (errors) {
-        console.log('KLSDKLAKDSAKLDKLASKDLSAKL', errors);
+      if (isCreatorUser === 'on') {
+        tasksQuery.skipUndefined().modify('filterCreator', id || undefined);
       }
+
+      const [tasks, users, statuses, labels] = await Promise.all([
+        tasksQuery,
+        app.objection.models.user.query(),
+        app.objection.models.status.query(),
+        app.objection.models.label.query(),
+      ]);
+
+      reply.render('tasks/index', {
+        tasks, statuses, users, labels, query,
+      });
       return reply;
     })
     .get('/tasks/new', { name: 'newTask', preValidation: app.authenticate }, async (req, reply) => {
@@ -88,7 +84,7 @@ export default (app) => {
         creatorId: Number(creatorId),
       };
 
-      const labelsIds = [...labelsList].map((id) => ({ id: parseInt(id, 10) }));
+      const labelsIds = [...labelsList].map((id) => ({ id: Number(id) }));
 
       task.$set({ ...taskData, labels: labelsIds });
 
@@ -183,7 +179,8 @@ export default (app) => {
 
       try {
         await app.objection.models.task.transaction(async (trx) => {
-          await currentTask.$query(trx).delete();
+          await currentTask.$relatedQuery('labels', trx).unrelate();
+          await app.objection.models.task.query(trx).deleteById(id);
         });
         req.flash('info', i18next.t('flash.tasks.delete.success'));
         reply.redirect(app.reverse('tasks'));

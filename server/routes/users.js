@@ -19,8 +19,8 @@ export default (app) => {
       const currentUserId = req.user.id;
 
       if (Number(id) !== currentUserId) {
-        req.flash('error', i18next.t('flash.wrongUserError'));
-        return reply.code(403).redirect(app.reverse('users'));
+        req.flash('error', i18next.t('flash.users.edit.wrongUser'));
+        return reply.redirect(app.reverse('users'));
       }
 
       const user = await app.objection.models.user.query().findById(id);
@@ -51,8 +51,8 @@ export default (app) => {
       const currentUserId = req.user.id;
 
       if (Number(id) !== currentUserId) {
-        req.flash('error', i18next.t('flash.wrongUserError'));
-        return reply.code(403).redirect(app.reverse('users'));
+        req.flash('error', i18next.t('flash.users.edit.wrongUser'));
+        return reply.redirect(app.reverse('users'));
       }
 
       try {
@@ -74,25 +74,22 @@ export default (app) => {
       const relatedTasks = await app.objection.models.task.query().where('executorId', id).orWhere('creatorId', id);
 
       if (currentUserId !== Number(id)) {
-        req.flash('error', i18next.t('flash.wrongUserError'));
-        return reply.code(403).redirect(app.reverse('users'));
+        req.flash('error', i18next.t('flash.users.delete.wrongUser'));
+        return reply.redirect(app.reverse('users'));
       }
 
       if (relatedTasks.length) {
-        req.flash('error', i18next.t('flash.authError'));
-        return reply.code(409).redirect(app.reverse('users'));
+        req.flash('error', i18next.t('flash.users.delete.error'));
+        return reply.redirect(app.reverse('users'));
       }
 
       try {
         await app.objection.models.user.query().deleteById(id);
         req.logOut();
         req.flash('info', i18next.t('flash.users.delete.success'));
-        reply.redirect(app.reverse('users'));
       } catch (errors) {
         req.flash('error', i18next.t('flash.users.delete.error'));
-        reply.redirect(app.reverse('users'));
       }
-
-      return reply;
+      return reply.redirect(app.reverse('users'));
     });
 };
