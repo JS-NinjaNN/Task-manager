@@ -117,42 +117,44 @@ export default (app) => {
     })
     .patch('/tasks/:id', { name: 'updateTask', preValidation: app.authenticate }, async (req, reply) => {
       const { id } = req.params;
-
       const task = await app.objection.models.task.query().findById(id);
-
-      const {
-        name, description, statusId, executorId, labels: labelsList = [],
-      } = req.body.data;
-
-      const taskData = {
-        ...task,
-        name,
-        description,
-        statusId: Number(statusId),
-        executorId: Number(executorId),
-      };
-
-      const labelsIds = [...labelsList].map((labelId) => ({ id: parseInt(labelId, 10) }));
-
-      task.$set({ ...taskData, labels: labelsIds });
+      const taskData = req.body.data;
+      task.$set(taskData);
 
       try {
-        const validTask = await app.objection.models.task.fromJson(taskData);
+        const labelIds = taskData.labels || [];
+
+        const taskLabels = await task.$relatedQuery('labels');
+        const currentLabelsIds = taskLabels.map((label) => label.id);
+
+        const labelsToAdd = labelIds.filter((labelId) => !currentLabelsIds.includes(labelId));
+        const labelsToRemove = currentLabelsIds.filter((labelId) => !labelIds.includes(labelId));
 
         await app.objection.models.task.transaction(async (trx) => {
-          const updatedTask = {
-            id,
-            ...validTask,
-            labels: labelsIds,
-          };
+          await app.objection.models.taskLabel.query(trx)
+            .delete()
+            .where('taskId', id)
+            .whereIn('labelId', labelsToRemove);
 
-          await app.objection.models.task
-            .query(trx)
-            .upsertGraph(updatedTask, { relate: true, unrelate: true });
+          labelsToAdd.forEach(async (labelId) => {
+            await app.objection.models.taskLabel.query(trx).insert({
+              taskId: id,
+              labelId,
+            });
+          });
+
+          const validTask = await app.objection.models.task.fromJson({
+            ...taskData,
+            statusId: Number(taskData.statusId),
+            creatorId: task.creatorId,
+            executorId: Number(taskData.executorId),
+          });
+
+          await app.objection.models.task.query(trx).findById(id).patch(validTask);
         });
 
         req.flash('info', i18next.t('flash.tasks.edit.success'));
-        reply.redirect(app.reverse('tasks'));
+        reply.redirect(app.reverse('root'));
       } catch (errors) {
         const [statuses, users, labels] = await Promise.all([
           app.objection.models.status.query(),
