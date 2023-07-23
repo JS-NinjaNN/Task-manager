@@ -98,6 +98,18 @@ describe('Tasks CRUD', () => {
     expect(refetchedTask.name).toEqual(modifiedName);
   });
 
+  it('deleteTaskWrongUser', async () => {
+    const wrongCookie = await makeLogin(app, mockData.users.existing.executor);
+    const params = mockData.tasks.existing;
+    const task = await models.task.query().findOne({ name: params.name });
+    const response = await app.inject({
+      method: 'DELETE',
+      url: app.reverse('deleteTask', { id: task.id }),
+      cookies: wrongCookie,
+    });
+    expect(response.statusCode).toBe(302);
+  });
+
   it('deleteTask', async () => {
     const params = mockData.tasks.existing;
     const task = await models.task.query().findOne({ name: params.name });

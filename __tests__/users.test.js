@@ -105,7 +105,7 @@ describe('test users CRUD', () => {
       cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(403);
+    expect(response.statusCode).toBe(302);
   });
 
   it('updateUser', async () => {
@@ -147,7 +147,7 @@ describe('test users CRUD', () => {
       cookies: cookie,
     });
 
-    expect(response.statusCode).toBe(403);
+    expect(response.statusCode).toBe(302);
   });
 
   it('deleteUser', async () => {
