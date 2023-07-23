@@ -6,79 +6,85 @@ export default {
     flash: {
       session: {
         create: {
-          success: 'Вы залогинены',
-          error: 'Неправильный Email или пароль',
+          success: 'Вы успешно вошли',
+          error: 'Неверный логин или пароль',
         },
         delete: {
-          success: 'Вы разлогинены',
+          success: 'Вы успешно вышли',
         },
       },
       users: {
         create: {
-          error: 'Не удалось зарегистрировать',
           success: 'Пользователь успешно зарегистрирован',
+          error: 'Регистрация не удалась',
+          wrongUser: 'Access denied! You cannot edit or delete another user.',
+        },
+        edit: {
+          success: 'Пользователь успешно изменен',
         },
         delete: {
-          success: 'Пользователь успешно удален',
-          error: 'Не удалось удалить пользователя',
+          success: 'User successfully deleted',
+          error: 'Failed to delete user',
+          wrongUser: 'Access denied! You cannot edit or delete another user.',
         },
       },
       statuses: {
         create: {
-          success: 'Статус успешно создан',
-          error: 'Не удалось создать статус',
+          success: 'Status successfully created',
+          error: 'Failed to create a status',
         },
         edit: {
-          success: 'Статус успешно отредактирован',
+          success: 'Status successfully edited',
         },
         delete: {
-          success: 'Статус успешно удален',
-          error: 'Не удалось удалить статус',
+          status: 'Status successfully deleted',
+          error: 'Failed to delete status',
         },
       },
       tasks: {
         create: {
-          success: 'Задача успешно создана',
-          error: 'Не удалось создать задачу',
+          success: 'Task sucсessfully created',
+          error: 'Failed to create a task',
         },
         edit: {
-          success: 'Задача успешно изменена',
-          error: 'Не удалось изменить задачу',
+          success: 'The task has been successfully modified',
+          error: 'Failed to change the task',
         },
         delete: {
-          success: 'Задача успешно удалена',
-          error: 'Задачу может удалить только её автор',
+          success: 'Task successfully deleted',
+          wrongUser: 'A task can be deleted only by its author',
         },
       },
       labels: {
         create: {
-          success: 'Метка успешно создана',
-          error: 'Не удалось создать метку',
+          success: 'Label successfully created',
+          error: 'Failed to create a label',
         },
         edit: {
-          success: 'Метка успешно изменена',
-          error: 'Не удалось изменить метку',
+          success: 'The label has been successfully modified',
+          error: 'Failed to change the label',
         },
         delete: {
-          success: 'Метка успешно удалена',
-          error: 'Не удалось удалить метку',
+          success: 'Label successfully deleted',
+          error: 'Failed to delete the label',
         },
       },
-      authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
-      wrongUserError: 'Доступ запрещен! Нельзя редактировать или удалять другого пользователя.',
+      authError: 'Access denied! Please login',
     },
     layouts: {
       application: {
-        users: 'Пользователи',
-        signIn: 'Вход',
-        signUp: 'Регистрация',
-        signOut: 'Выход',
-        statuses: 'Статусы',
-        labels: 'Метки',
-        tasks: 'Задачи',
-        createStatus: 'Создать статус',
-        createTask: 'Создать задачу',
-        createLabel: 'Создать метку',
+        users: 'Users',
+        signIn: 'Login',
+        signUp: 'Register',
+        signOut: 'Logout',
+        statuses: 'Statuses',
+        labels: 'Labels',
+        tasks: 'Tasks',
+        RU: 'RU',
+        EN: 'EN',
+        createStatus: 'Create a status',
+        createTask: 'Create a task',
+        createLabel: 'Create a label',
       },
     },
     views: {
@@ -203,9 +209,7 @@ export default {
           createdAt: 'Дата создания',
         },
       },
-      actions: 'Действия',
+      actions: 'Actions',
     },
-    email: 'Email',
-    password: 'Пароль',
   },
 };
