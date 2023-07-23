@@ -16,7 +16,7 @@ import fastifyObjectionjs from 'fastify-objectionjs';
 import qs from 'qs';
 import Pug from 'pug';
 import i18next from 'i18next';
-// import Rollbar from 'rollbar';
+import Rollbar from 'rollbar';
 
 import ru from './locales/ru.js';
 import en from './locales/en.js';
@@ -73,26 +73,26 @@ const setupLocalization = async () => {
 };
 
 const addHooks = (app) => {
-  app.addHook('preHandler', async (req, reply) => {
-    reply.locals = {
-      isAuthenticated: () => req.isAuthenticated(),
-    };
-  });
+  app
+    .addHook('preHandler', async (req, reply) => {
+      reply.locals = {
+        isAuthenticated: () => req.isAuthenticated(),
+      };
+    });
 };
 
-// const setErrorHandler = (app) => {
-//   const rollbar = new Rollbar({
-//     accessToken: process.env.ROLLBAR_ACCESS_KEY,
-//     captureUncaught: true,
-//     captureUnhandledRejections: true,
-//   });
-//   rollbar.log('test');
+const setErrorHandler = (app) => {
+  const rollbar = new Rollbar({
+    accessToken: process.env.ROLLBAR_ACCESS_KEY,
+    captureUncaught: true,
+    captureUnhandledRejections: true,
+  });
 
-//   app.setErrorHandler((error) => {
-//     rollbar.error(error);
-//   });
-//   return app;
-// };
+  app.setErrorHandler((error) => {
+    rollbar.error(error);
+  });
+  return app;
+};
 
 const registerPlugins = async (app) => {
   await app.register(fastifySensible);
@@ -142,7 +142,7 @@ export default async (app, _options) => {
   setUpViews(app);
   setUpStaticAssets(app);
   addRoutes(app);
-  // setErrorHandler(app);
+  setErrorHandler(app);
   addHooks(app);
 
   return app;
