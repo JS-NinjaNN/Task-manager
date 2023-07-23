@@ -76,7 +76,7 @@ export default {
     layouts: {
       application: {
         users: 'Пользователи',
-        signIn: 'Войти',
+        signIn: 'Вход',
         signUp: 'Зарегистрироваться',
         signOut: 'Выйти',
         statuses: 'Статусы',
