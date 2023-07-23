@@ -11,6 +11,7 @@ export default {
         },
         delete: {
           success: 'You are logged out',
+          error: 'Something went wrong',
         },
       },
       users: {
