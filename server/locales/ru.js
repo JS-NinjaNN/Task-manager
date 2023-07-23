@@ -77,8 +77,8 @@ export default {
       application: {
         users: 'Пользователи',
         signIn: 'Вход',
-        signUp: 'Зарегистрироваться',
-        signOut: 'Выйти',
+        signUp: 'Регистрация',
+        signOut: 'Выход',
         statuses: 'Статусы',
         labels: 'Метки',
         tasks: 'Задачи',
