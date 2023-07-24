@@ -5,8 +5,8 @@ export const up = (knex) => (
         table.increments('id').primary();
         table.string('name').notNullable();
         table.string('description').defaultTo('');
-        table.integer('status_id').notNullable().unsigned().references('id').inTable('statuses');
-        table.integer('creator_id').notNullable().unsigned().references('id').inTable('users');
+        table.integer('status_id').unsigned().references('id').inTable('statuses');
+        table.integer('creator_id').unsigned().references('id').inTable('users');
         table.integer('executor_id').unsigned().references('id').inTable('users');
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
