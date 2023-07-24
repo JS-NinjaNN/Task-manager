@@ -122,12 +122,12 @@ export default (app) => {
       task.$set(taskData);
 
       try {
-        const labelIds = taskData.labels || [];
+        const labelIds = taskData.labels ?? [];
 
         const taskLabels = await task.$relatedQuery('labels');
         const currentLabelsIds = taskLabels.map((label) => label.id);
 
-        const labelsToAdd = labelIds.filter((labelId) => !currentLabelsIds.includes(labelId));
+        const labelsToAdd = [...labelIds].filter((labelId) => !currentLabelsIds.includes(labelId));
         const labelsToRemove = currentLabelsIds.filter((labelId) => !labelIds.includes(labelId));
 
         await app.objection.models.task.transaction(async (trx) => {
@@ -143,19 +143,18 @@ export default (app) => {
             });
           });
 
-          const validTask = await app.objection.models.task.fromJson({
+          await app.objection.models.task.fromJson({
             ...taskData,
             statusId: Number(taskData.statusId),
             creatorId: task.creatorId,
             executorId: Number(taskData.executorId),
-          });
-
-          await app.objection.models.task.query(trx).findById(id).patch(validTask);
+          }).$query(trx).findById(id).patch();
         });
 
         req.flash('info', i18next.t('flash.tasks.edit.success'));
         reply.redirect(app.reverse('root'));
       } catch (errors) {
+        console.log('KDSAJKDJKASDJKASJKDSAJKDJKSADJK', errors);
         const [statuses, users, labels] = await Promise.all([
           app.objection.models.status.query(),
           app.objection.models.user.query(),
