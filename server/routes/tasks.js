@@ -119,7 +119,6 @@ export default (app) => {
       const { id } = req.params;
       const task = await app.objection.models.task.query().findById(id);
       const taskData = req.body.data;
-      task.$set(taskData);
 
       try {
         const labelIds = taskData.labels ?? [];
@@ -143,12 +142,12 @@ export default (app) => {
             });
           });
 
-          await app.objection.models.task.fromJson({
+          await task.$query(trx).patch({
             ...taskData,
             statusId: Number(taskData.statusId),
             creatorId: task.creatorId,
             executorId: Number(taskData.executorId),
-          }).$query(trx).findById(id).patch();
+          });
         });
 
         req.flash('info', i18next.t('flash.tasks.edit.success'));
@@ -160,6 +159,8 @@ export default (app) => {
           app.objection.models.user.query(),
           app.objection.models.label.query(),
         ]);
+
+        task.$set(taskData);
 
         req.flash('error', i18next.t('flash.tasks.edit.error'));
         reply.render('tasks/edit', {
