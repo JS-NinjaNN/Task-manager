@@ -151,9 +151,8 @@ export default (app) => {
         });
 
         req.flash('info', i18next.t('flash.tasks.edit.success'));
-        reply.redirect(app.reverse('root'));
+        reply.redirect(app.reverse('tasks'));
       } catch (errors) {
-        console.log('KDSAJKDJKASDJKASJKDSAJKDJKSADJK', errors);
         const [statuses, users, labels] = await Promise.all([
           app.objection.models.status.query(),
           app.objection.models.user.query(),
