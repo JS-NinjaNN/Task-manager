@@ -1,4 +1,4 @@
-name: eslit-jest-check
+name: eslint-jest-check
 
 on:
   push:
