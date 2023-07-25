@@ -1,5 +1,5 @@
 [![hexlet-check](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/hexlet-check.yml)
-[![Node CI](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/nodejs.yml/badge.svg)](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/nodejs.yml)
+[![eslint-jest-check](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/eslint-jest-check.yml/badge.svg)](https://github.com/JS-NinjaNN/backend-project-6/actions/workflows/eslint-jest-check.yml)
 
 # Task Manager
 
