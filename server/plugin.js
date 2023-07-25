@@ -1,5 +1,6 @@
 // @ts-check
 
+import * as dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fastifyStatic from '@fastify/static';
@@ -11,6 +12,7 @@ import fastifySecureSession from '@fastify/secure-session';
 import fastifyPassport from '@fastify/passport';
 import fastifySensible from '@fastify/sensible';
 import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
+// @ts-ignore
 import fastifyMethodOverride from 'fastify-method-override';
 import fastifyObjectionjs from 'fastify-objectionjs';
 import qs from 'qs';
@@ -26,6 +28,8 @@ import getHelpers from './helpers/index.js';
 import * as knexConfig from '../knexfile.js';
 import models from './models/index.js';
 import FormStrategy from './lib/passportStrategies/FormStrategy.js';
+
+dotenv.config();
 
 const __dirname = fileURLToPath(path.dirname(import.meta.url));
 
@@ -88,8 +92,10 @@ const setErrorHandler = (app) => {
     captureUnhandledRejections: true,
   });
 
-  app.setErrorHandler((error) => {
+  // @ts-ignore
+  app.setErrorHandler((error, req, reply) => {
     rollbar.error(error);
+    reply.status(error.status || 500).send(error);
   });
   return app;
 };
@@ -106,14 +112,20 @@ const registerPlugins = async (app) => {
     },
   });
 
+  // @ts-ignore
   fastifyPassport.registerUserDeserializer(
     (user) => app.objection.models.user.query().findById(user.id),
   );
+  // @ts-ignore
   fastifyPassport.registerUserSerializer((user) => Promise.resolve(user));
+  // @ts-ignore
   fastifyPassport.use(new FormStrategy('form', app));
+  // @ts-ignore
   await app.register(fastifyPassport.initialize());
+  // @ts-ignore
   await app.register(fastifyPassport.secureSession());
   await app.decorate('fp', fastifyPassport);
+  // @ts-ignore
   app.decorate('authenticate', (...args) => fastifyPassport.authenticate(
     'form',
     {

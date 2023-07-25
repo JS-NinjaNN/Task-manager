@@ -39,7 +39,7 @@ block content
             td= task.status.name
             td= `${task.creator.firstName} ${task.creator.lastName}`
             td= task.executor && `${task.executor.firstName} ${task.executor.lastName}`
-            td= task.createdAt
+            td= formatDate(task.createdAt)
             td
               .d-flex.flex-wrap
                 a.btn.btn-primary.me-1(href=`/tasks/${task.id}/edit`)= t('views.tasks.table.action.change')
