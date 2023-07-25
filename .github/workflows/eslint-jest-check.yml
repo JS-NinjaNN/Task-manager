@@ -20,6 +20,14 @@ jobs:
         with:
           node-version: '18.x'
           cache: 'npm'
-      - run: make setup
-      - run: make lint
-      - run: make test
+      - name: Setup project
+        run: make setup
+      - name: Run linter
+        run: make lint
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v3.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.TEST_COVERAGE_CODECLIMATE }}
+        with:
+          coverageCommand: make test-coverage
+          debug: true
