@@ -114,7 +114,7 @@ describe('test users CRUD', () => {
 
     const modifiedData = {
       firstName: 'Fedor',
-      email: 'mma@gmailcom',
+      email: 'mma@gmail.com',
       lastName: 'Emelianinko',
       password,
     };
