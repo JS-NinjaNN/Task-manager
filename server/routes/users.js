@@ -61,7 +61,6 @@ export default (app) => {
         req.flash('info', i18next.t('flash.users.edit.success'));
         reply.redirect(app.reverse('users'));
       } catch (errors) {
-        console.log('LASKDKLASDKLASKDKASL', errors)
         req.flash('error', i18next.t('flash.users.edit.error'));
         user.$set(data);
         reply.render('users/edit', { user, errors: errors.data ?? {} });
