@@ -7,7 +7,7 @@
 
 ### Description
 
-#### [Task manager](https://backend-project-6-production-709f.up.railway.app/)
+#### [Task manager](https://jsninjann-task-manager.up.railway.app/)
 
 The Task Manager is a feature-rich web application written in Fastify, featuring server-side rendering with the Pug template engine. It utilizes Knex.js and Objection.js to interact with the database. During development, the application uses SQLite, while in production, it seamlessly switches to Postgresql for improved performance and scalability.
 
@@ -31,8 +31,8 @@ To set up the Task Manager locally, follow these steps:
 #### Repo clone
 
 ```bash
-git clone git@github.com:JS-NinjaNN/backend-project-6.git
-cd backend-project-6
+git clone git@github.com:JS-NinjaNN/Task-manager.git
+cd Task-manager
 ```
 
 ### Setup

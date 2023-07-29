@@ -25,12 +25,12 @@
    "license": "ISC",
    "repository": {
       "type": "git",
-      "url": "git+https://github.com/JS-NinjaNN/backend-project-6.git"
+      "url": "git+https://github.com/JS-NinjaNN/Task-manager.git"
    },
    "bugs": {
-      "url": "https://github.com/JS-NinjaNN/backend-project-6/issues"
+      "url": "https://github.com/JS-NinjaNN/Task-manager/issues"
    },
-   "homepage": "https://github.com/JS-NinjaNN/backend-project-6#readme",
+   "homepage": "https://github.com/JS-NinjaNN/Task-manager#readme",
    "dependencies": {
       "@fastify/formbody": "^7.4.0",
       "@fastify/passport": "^2.3.0",
